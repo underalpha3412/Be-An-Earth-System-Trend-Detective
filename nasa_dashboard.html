@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NASA POWER · New Delhi Climate 2015–2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#f3ede2; --paper-2:#ece4d6;
+    --ink:#3d362d; --ink-dim:#736857; --ink-faint:#a4978a;
+    --line:rgba(58,44,30,.12);
+    --brd:rgba(255,255,255,.78);
+    --amber:#e59a4e; --ember:#ff5d1a; --orange:#ff7a18; --orange-lt:#ffb066;
+    --void:#0a0908; --void-2:#151110;
+    --ok:#79e0a2; --warn:#c2531a;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Poppins',sans-serif;
+    --mono:'Poppins',sans-serif;
+    --radius:26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    color:var(--ink); font-family:var(--sans); min-height:100vh; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility; letter-spacing:.005em;
+    background:
+      radial-gradient(1100px 720px at 8% -10%, #f6f1e6, transparent 62%),
+      radial-gradient(1000px 700px at 96% 2%, #f4ecdd, transparent 60%),
+      radial-gradient(900px 900px at 50% 110%, #eae0cd, transparent 66%),
+      linear-gradient(180deg,#f2ece1,#e9e0d0);
+  }
+  /* soft warm dust, cursor-reactive (kept from the original build) */
+  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+  /* gentle vignette instead of HUD scanlines */
+  #scan{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55;
+    background:radial-gradient(120% 85% at 50% -10%, transparent 52%, rgba(120,94,64,.10) 100%);}
+
+  /* liquid glass backdrop — slow drifting light fields behind the shell */
+  #liquid{position:fixed;inset:-22% -12%;z-index:0;pointer-events:none;
+    filter:blur(76px) saturate(112%);opacity:.52}
+  #liquid .lb{position:absolute;display:block;border-radius:50%;will-change:transform}
+  .lb1{width:46vw;height:46vw;left:0;top:2%;
+    background:radial-gradient(circle at 40% 40%, rgba(255,188,126,.8), rgba(255,188,126,0) 68%);
+    animation:drift1 34s ease-in-out infinite alternate}
+  .lb2{width:40vw;height:40vw;right:2%;top:-6%;
+    background:radial-gradient(circle at 55% 45%, rgba(150,194,220,.75), rgba(150,194,220,0) 70%);
+    animation:drift2 42s ease-in-out infinite alternate}
+  .lb3{width:54vw;height:54vw;left:24%;bottom:-18%;
+    background:radial-gradient(circle at 50% 50%, rgba(230,168,100,.62), rgba(230,168,100,0) 68%);
+    animation:drift3 48s ease-in-out infinite alternate}
+  .lb4{width:34vw;height:34vw;right:16%;bottom:4%;
+    background:radial-gradient(circle at 50% 50%, rgba(249,226,196,.68), rgba(249,226,196,0) 70%);
+    animation:drift4 38s ease-in-out infinite alternate}
+  @keyframes drift1{from{transform:translate3d(-3%,-2%,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.12)}}
+  @keyframes drift2{from{transform:translate3d(2%,3%,0) scale(1.05)}to{transform:translate3d(-5%,-3%,0) scale(.96)}}
+  @keyframes drift3{from{transform:translate3d(0,2%,0) scale(.98)}to{transform:translate3d(-6%,-5%,0) scale(1.1)}}
+  @keyframes drift4{from{transform:translate3d(3%,-3%,0) scale(1)}to{transform:translate3d(-3%,3%,0) scale(1.08)}}
+
+  /* ===== app shell ===== */
+  .wrap{
+    position:relative; z-index:2; max-width:1460px; margin:20px auto 44px;
+    padding:24px 30px 40px; border-radius:40px; overflow:clip;
+    border:1px solid rgba(255,255,255,.42);
+    background:
+      radial-gradient(58% 17% at 32% 11%, rgba(18,38,58,.40), rgba(18,38,58,0) 74%),
+      radial-gradient(30% 9% at 74% 8%, rgba(255,255,255,.42), transparent 70%),
+      radial-gradient(50% 13% at 14% 25%, rgba(255,255,255,.42), transparent 72%),
+      radial-gradient(66% 11% at 56% 40%, rgba(255,224,181,.46), transparent 76%),
+      radial-gradient(84% 10% at 50% 58%, rgba(226,158,92,.34), transparent 78%),
+      linear-gradient(180deg,
+        rgba(148,184,208,.86) 0px,
+        rgba(180,203,212,.84) 250px,
+        rgba(212,211,198,.86) 500px,
+        rgba(230,212,188,.88) 760px,
+        rgba(240,229,213,.9) 1040px,
+        rgba(246,240,231,.92) 1360px,
+        rgba(244,238,227,.93) 100%);
+    backdrop-filter:blur(28px) saturate(150%);-webkit-backdrop-filter:blur(28px) saturate(150%);
+    box-shadow:0 60px 140px -70px rgba(74,52,30,.5),
+               inset 0 1px 0 rgba(255,255,255,.6),
+               inset 0 0 0 1px rgba(255,255,255,.16);
+  }
+  .wrap > *{position:relative;z-index:1}
+  .wrap::before{content:"";position:absolute;left:-8%;right:-8%;top:-6%;height:560px;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(36% 44% at 20% 38%, rgba(255,255,255,.6), transparent 70%),
+      radial-gradient(26% 34% at 41% 62%, rgba(255,255,255,.42), transparent 72%),
+      radial-gradient(32% 40% at 78% 30%, rgba(255,255,255,.46), transparent 70%);
+    filter:blur(46px);opacity:.85}
+  /* slow specular sweep — the wet highlight of liquid glass */
+  .wrap::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.36;
+    background:
+      linear-gradient(104deg, transparent 24%, rgba(255,255,255,.24) 40%, rgba(255,255,255,0) 54%),
+      radial-gradient(120% 55% at 84% 8%, rgba(255,255,255,.18), transparent 60%);
+    animation:sheen 30s ease-in-out infinite alternate}
+  @keyframes sheen{from{transform:translate3d(-1.5%,0,0) scale(1.02)}to{transform:translate3d(1.5%,0,0) scale(1.05)}}
+
+  /* ===== top bar ===== */
+  header.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:11px 12px 11px 16px;border:1px solid rgba(255,255,255,.34);border-radius:999px;
+    background:linear-gradient(100deg,rgba(18,34,50,.34),rgba(18,34,50,.14));
+    backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);
+    box-shadow:0 24px 50px -30px rgba(24,38,52,.8), inset 0 1px 0 rgba(255,255,255,.34);
+    position:sticky;top:16px;z-index:50}
+  .brand{display:flex;align-items:center;gap:13px}
+  .logo{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(150deg,rgba(255,255,255,.35),rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+  .logo svg{width:24px;height:24px}
+  .brand h1{font-family:var(--serif);font-size:1.2rem;font-weight:400;letter-spacing:.004em;color:#fff;
+    line-height:1.12;font-optical-sizing:auto}
+  .brand .sub{font-family:var(--mono);font-size:.58rem;color:rgba(255,255,255,.7);letter-spacing:.17em;margin-top:4px}
+  .hud-right{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.64rem;color:rgba(255,255,255,.85)}
+  .pill{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 14px;
+    background:linear-gradient(150deg,rgba(255,255,255,.26),rgba(255,255,255,.08));
+    letter-spacing:.09em;white-space:nowrap;backdrop-filter:blur(10px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .pill b{color:#ffe0b0;font-weight:500}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);
+    box-shadow:0 0 10px rgba(121,224,162,.9);margin-right:7px;animation:blink 2.4s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  #clock{color:#fff;letter-spacing:.11em}
+
+  /* ===== hero ===== */
+  .hero{margin:36px 4px 26px;display:grid;grid-template-columns:1.55fr 1fr;gap:26px;align-items:end;
+    position:relative;isolation:isolate}
+  .hero::before{content:"";position:absolute;inset:-34px -34px -18px -34px;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(62% 80% at 24% 36%, rgba(20,44,68,.34), rgba(20,44,68,0) 74%),
+      radial-gradient(76% 70% at 58% 62%, rgba(20,44,68,.15), rgba(20,44,68,0) 80%);
+    filter:blur(12px)}
+  .hero h2{font-family:var(--serif);font-weight:300;font-size:clamp(2.1rem,4.3vw,3.6rem);
+    line-height:1.07;letter-spacing:.002em;font-optical-sizing:auto;
+    background:linear-gradient(96deg,#fbf4e8 4%,#f6dcb8 52%,#dda876 98%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 10px 30px rgba(26,42,60,.35))}
+  .hero p{color:rgba(255,255,255,.9);font-size:.98rem;max-width:620px;margin-top:14px;line-height:1.66;
+    text-shadow:0 1px 16px rgba(26,42,60,.35)}
+  .coords{font-family:var(--mono);font-size:.66rem;color:rgba(255,255,255,.68);
+    border:1px solid rgba(255,255,255,.26);padding:16px 18px;
+    background:linear-gradient(150deg,rgba(16,32,48,.34),rgba(16,32,48,.12));
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-radius:20px;letter-spacing:.09em;line-height:2.05;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 20px 40px -30px rgba(20,34,48,.9)}
+  .coords b{color:#fff;font-weight:500}
+
+  /* ===== KPI cards (frosted glass) ===== */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}
+  .kpi{border:1px solid var(--brd);border-radius:24px;padding:20px 20px 18px;
+    background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,247,238,.36));
+    backdrop-filter:blur(20px) saturate(125%);-webkit-backdrop-filter:blur(20px) saturate(125%);
+    box-shadow:0 24px 46px -32px rgba(62,44,26,.5), inset 0 1px 0 rgba(255,255,255,.82);
+    position:relative;overflow:hidden;
+    transition:transform .4s cubic-bezier(.2,.7,.3,1), box-shadow .4s ease}
+  .kpi:hover{transform:translateY(-4px);
+    box-shadow:0 30px 56px -30px rgba(62,44,26,.55), inset 0 1px 0 #fff}
+  .kpi::before{content:"";position:absolute;top:-46px;right:-38px;width:132px;height:132px;border-radius:50%;
+    background:radial-gradient(circle, color-mix(in srgb, var(--accent,#ff7a18) 52%, transparent), transparent 70%);
+    filter:blur(20px);opacity:.34;pointer-events:none}
+  .kpi::after{content:"";position:absolute;left:20px;top:0;width:46px;height:2px;border-radius:2px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--accent,#ff7a18) 80%,#fff),transparent);
+    box-shadow:0 0 14px color-mix(in srgb,var(--accent,#ff7a18) 70%,transparent)}
+  .kpi .k-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.17em;color:var(--ink-faint)}
+  .kpi .k-val{font-family:var(--serif);font-size:2.5rem;font-weight:400;line-height:1.02;margin:12px 0 6px;
+    color:#433b31;font-optical-sizing:auto}
+  .kpi .k-sub{font-size:.76rem;color:var(--ink-dim);line-height:1.5}
+  .kpi .k-sub b{color:#2e2720;font-weight:600}
+
+  /* ===== glass panels ===== */
+  .glass{border:1px solid var(--brd);border-radius:var(--radius);
+    background:linear-gradient(170deg,rgba(255,255,255,.58),rgba(255,248,239,.32));
+    backdrop-filter:blur(22px) saturate(122%);-webkit-backdrop-filter:blur(22px) saturate(122%);
+    box-shadow:0 28px 64px -38px rgba(62,44,26,.46), inset 0 1px 0 rgba(255,255,255,.82);
+    padding:22px;position:relative;overflow:hidden}
+  .glass::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+    background:linear-gradient(180deg,rgba(255,255,255,.42),transparent 22%)}
+  .panel-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+    margin-bottom:16px;position:relative;z-index:1}
+  .panel-head h3{font-family:var(--sans);font-size:.72rem;letter-spacing:.09em;font-weight:500;
+    text-transform:uppercase;color:#3a3128;display:flex;align-items:center}
+  .panel-head h3::before{content:"";width:16px;height:2px;border-radius:2px;margin-right:9px;
+    background:linear-gradient(90deg,#ff9a4d,#ff5d1a);box-shadow:0 0 10px rgba(255,122,24,.85)}
+  .panel-head .tag{font-family:var(--mono);font-size:.59rem;color:var(--ink-faint);letter-spacing:.15em}
+  .chart-wrap{position:relative;height:320px;border-radius:18px;padding:8px 4px 2px;
+    background:radial-gradient(130% 95% at 50% -10%, #171311, #0a0908 72%);
+    border:1px solid rgba(0,0,0,.55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),
+               inset 0 -40px 80px -50px rgba(255,122,24,.5),
+               0 22px 44px -32px rgba(0,0,0,.85)}
+  .chart-wrap.tall{height:344px}
+
+  /* ===== controls ===== */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:relative;z-index:1}
+  .filterbar{padding:14px 18px;margin-bottom:18px;border-radius:22px;gap:14px;justify-content:flex-start}
+  .console-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.19em;color:var(--ink-faint)}
+
+  /* ==== station toggle bar (same glass language, button-theme chips) ==== */
+  .locbar{padding:12px 16px;margin:0 4px 20px;border-radius:22px;gap:12px;align-items:center;
+    overflow:visible;z-index:20}
+  #locChips{gap:8px}
+  #locChips.busy{opacity:.55;pointer-events:none;transition:opacity .2s ease}
+  .loc{--c:#e0a86f}
+  .loc-status{font-family:var(--mono);font-size:.58rem;letter-spacing:.13em;color:var(--ink-faint);
+    margin-left:auto;white-space:nowrap;transition:color .3s ease}
+  .loc-status.busy{color:#b07a48}
+  .loc-status.err{color:var(--warn)}
+
+  /* ==== city search ==== */
+  .searchbox{position:relative;display:flex;align-items:center;gap:9px;flex:0 1 268px;min-width:198px;
+    height:38px;padding:0 14px 0 13px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.86);
+    background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,248,239,.5));
+    box-shadow:inset 0 1px 0 #fff, 0 12px 26px -20px rgba(60,44,28,.8);
+    transition:box-shadow .25s ease, border-color .25s ease}
+  .searchbox:focus-within{border-color:#ffb066;box-shadow:0 0 0 3px rgba(255,122,24,.13), inset 0 1px 0 #fff}
+  .searchbox svg{width:14px;height:14px;flex:0 0 auto;color:var(--ink-faint)}
+  .searchbox input{flex:1 1 auto;min-width:64px;border:0;outline:0;background:transparent;
+    font-family:var(--sans);font-size:.78rem;font-weight:400;color:var(--ink);letter-spacing:.01em;
+    -webkit-appearance:none;appearance:none}
+  .searchbox input::-webkit-search-cancel-button{display:none}
+  .searchbox input::placeholder{color:var(--ink-faint)}
+  #searchStatus{font-family:var(--sans);font-size:.56rem;letter-spacing:.14em;color:var(--ink-faint);white-space:nowrap}
+  #searchResults{position:absolute;left:0;top:calc(100% + 9px);z-index:60;width:min(380px,86vw);
+    display:none;flex-direction:column;padding:8px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.9);
+    background:linear-gradient(170deg,rgba(255,255,255,.94),rgba(255,247,238,.88));
+    backdrop-filter:blur(26px) saturate(130%);-webkit-backdrop-filter:blur(26px) saturate(130%);
+    box-shadow:0 34px 66px -30px rgba(60,44,28,.5), inset 0 1px 0 #fff}
+  #searchResults.open{display:flex}
+  .result{display:grid;grid-template-columns:1fr auto;gap:1px 12px;text-align:left;cursor:pointer;
+    border:0;border-radius:13px;padding:9px 11px;background:transparent;color:var(--ink);
+    font-family:var(--sans);transition:background .2s ease}
+  .result:hover,.result.active{background:linear-gradient(150deg,rgba(255,214,170,.62),rgba(255,178,118,.34))}
+  .r-name{font-size:.8rem;font-weight:500;letter-spacing:.01em}
+  .r-meta{grid-column:1;font-size:.68rem;font-weight:300;color:var(--ink-dim)}
+  .r-coord{grid-column:2;grid-row:1 / span 2;align-self:center;font-size:.6rem;font-weight:300;
+    color:var(--ink-faint);letter-spacing:.04em;white-space:nowrap}
+  .r-foot{font-size:.5rem;font-weight:300;letter-spacing:.16em;color:var(--ink-faint);
+    padding:7px 11px 2px;text-align:right}
+
+  select{appearance:none;-webkit-appearance:none;color:var(--ink);cursor:pointer;
+    font-family:var(--sans);font-size:.78rem;font-weight:400;letter-spacing:.01em;
+    border-radius:999px;padding:10px 40px 10px 18px;border:1px solid rgba(255,255,255,.9);
+    background-color:rgba(255,255,255,.4);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'><path d='M1 1.2l4.5 4.5L10 1.2' stroke='%239a8d7d' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"),
+      linear-gradient(160deg,rgba(255,255,255,.86),rgba(255,248,239,.55));
+    background-repeat:no-repeat,no-repeat;
+    background-position:right 16px center, center;
+    background-size:11px 7px, 100% 100%;
+    box-shadow:inset 0 1px 0 #fff, 0 12px 26px -20px rgba(60,44,28,.8);
+    transition:box-shadow .25s ease, border-color .25s ease, transform .25s ease}
+  select:hover{transform:translateY(-1px);border-color:#fff}
+  select:focus{outline:none;border-color:#ffb066;
+    box-shadow:0 0 0 3px rgba(255,122,24,.16), inset 0 1px 0 #fff}
+  select option{background:#fdfaf4;color:var(--ink)}
+
+  /* ==== buttons · glossy gradient glass (button_theme) ==== */
+  .chip{font-family:var(--sans);font-size:.73rem;font-weight:400;letter-spacing:.02em;
+    cursor:pointer;user-select:none;position:relative;isolation:isolate;overflow:hidden;
+    border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:9px 16px;
+    color:var(--ink-dim);
+    background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.3));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 10px 22px -18px rgba(60,44,28,.9);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:color .28s ease, box-shadow .28s ease, transform .28s ease, border-color .28s ease}
+  .chip:hover{color:var(--ink);transform:translateY(-1px);border-color:#fff}
+  .chip.on{color:#fff;font-weight:500;border-color:transparent;
+    background:
+      radial-gradient(58% 130% at 20% -10%, rgba(255,255,255,.8), transparent 56%),
+      radial-gradient(circle at 92% 6%, rgba(255,255,255,.55) 0 4px, transparent 5px),
+      radial-gradient(circle at 84% 94%, rgba(255,255,255,.3) 0 5px, transparent 6px),
+      radial-gradient(circle at 6% 96%, rgba(255,255,255,.22) 0 4px, transparent 5px),
+      linear-gradient(150deg,
+        color-mix(in srgb, var(--c,#ff7a18) 72%, #fff) 0%,
+        var(--c,#ff7a18) 44%,
+        color-mix(in srgb, var(--c,#ff7a18) 62%, #3d1d08) 100%);
+    box-shadow:
+      0 16px 30px -16px color-mix(in srgb, var(--c,#ff7a18) 58%, transparent),
+      inset 0 1px 0 rgba(255,255,255,.6),
+      inset 0 -10px 20px -12px rgba(0,0,0,.34);
+    text-shadow:0 1px 8px rgba(0,0,0,.18)}
+  .chip.on::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 44%)}
+
+  .switch{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-size:.6rem;letter-spacing:.12em;color:var(--ink-dim);cursor:pointer;user-select:none}
+  .switch .track{width:38px;height:20px;border-radius:999px;position:relative;transition:.28s ease;
+    background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.25));
+    border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 3px rgba(60,44,28,.18)}
+  .switch .track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 2px 6px rgba(60,44,28,.35);transition:.28s ease}
+  .switch.on .track{background:linear-gradient(95deg,color-mix(in srgb,var(--orange-lt) 70%,#fff),var(--orange));
+    border-color:transparent;box-shadow:0 8px 18px -10px rgba(255,122,24,.95), inset 0 1px 0 rgba(255,255,255,.6)}
+  .switch.on .track::after{left:20px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.95)}
+
+  .grid-main{display:grid;grid-template-columns:1.45fr 1fr;gap:16px}
+  .grid-main > .glass.wide2{grid-column:1 / -1}
+  #donutBox{grid-column:1 / -1}
+  #donutBox .chart-wrap{height:300px}
+  #barNote,#profileNote{font-family:var(--mono);font-size:.58rem;color:var(--ink-faint);
+    letter-spacing:.1em;margin-top:12px;position:relative;z-index:1}
+
+  .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    font-family:var(--mono);font-size:.6rem;color:var(--ink-faint);letter-spacing:.1em}
+  .foot b{color:var(--ink-dim);font-weight:500}
+
+  #boot{position:fixed;inset:0;z-index:99;display:grid;place-items:center;background:var(--paper);
+    font-family:var(--mono);letter-spacing:.3em;color:#b0743a;font-size:.72rem;
+    transition:opacity .5s}
+  .spin{width:44px;height:44px;margin:0 auto 18px;border-radius:50%;
+    border:2px solid rgba(176,116,58,.16);border-top-color:var(--orange);animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  @media (prefers-reduced-motion: reduce){
+    #liquid .lb, .wrap::after{animation:none}
+    html{scroll-behavior:auto}
+  }
+  @media(max-width:1080px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .grid-main{grid-template-columns:1fr}
+    .hero{grid-template-columns:1fr;gap:18px}
+    .wrap{padding:20px 20px 34px;border-radius:32px}
+  }
+  @media(max-width:640px){
+    .kpis{grid-template-columns:1fr}
+    .hud-right .pill.hide-sm{display:none}
+    .wrap{padding:16px 14px 30px;margin:12px 10px 30px;border-radius:26px}
+    .brand h1{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+<div id="boot"><div style="text-align:center"><div class="spin"></div>INITIALIZING TELEMETRY…</div></div>
+<canvas id="starfield"></canvas>
+<div id="scan"></div>
+<div id="liquid" aria-hidden="true"><span class="lb lb1"></span><span class="lb lb2"></span><span class="lb lb3"></span><span class="lb lb4"></span></div>
+
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" fill="#ffb066"/><ellipse cx="12" cy="12" rx="9.4" ry="3.3" stroke="#ffffff" stroke-opacity=".85" stroke-width="1.1" transform="rotate(-24 12 12)"/><ellipse cx="12" cy="12" rx="9.4" ry="3.3" stroke="#ffffff" stroke-opacity=".85" stroke-width="1.1" transform="rotate(24 12 12)"/></svg>
+      </div>
+      <div>
+        <h1>NASA POWER · Climate</h1>
+        <div class="sub" id="brandSub">AGROCLIMATOLOGY GRID // NEW DELHI STATION</div>
+      </div>
+    </div>
+    <div class="hud-right">
+      <span class="pill hide-sm"><span class="dot"></span>LIVE RENDER <b>· CERES-SYN</b></span>
+      <span class="pill" id="clock">--:--:--</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2 id="heroTitle">New Delhi atmospheric<br/>telemetry 2015–2025</h2>
+      <p>Eleven years of NASA POWER monthly agroclimatology, decoded into a live console — thermal stress, monsoon pulses, humidity, soil heat and surface winds on one glass flight deck.</p>
+    </div>
+    <div class="coords">
+      LAT <b id="coordLat">28.6209</b>° N · LON <b id="coordLon">77.0907</b>° E<br/>
+      COMMUNITY <b>AG</b> · FORMAT <b>MONTHLY/POINT JSON</b><br/>
+      SOURCE <b>power.larc.nasa.gov</b>
+    </div>
+  </section>
+
+  <div class="controls glass locbar">
+    <span class="console-label">STATION ▸</span>
+    <div class="searchbox">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.6" stroke="currentColor" stroke-width="1.7"/><path d="M15.6 15.6L21 21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input id="citySearch" type="search" placeholder="Search any city…" autocomplete="off" spellcheck="false" aria-label="Search any city in the world" />
+      <span id="searchStatus"></span>
+      <div id="searchResults"></div>
+    </div>
+    <span class="controls" id="locChips"></span>
+    <span class="loc-status" id="locStatus">NASA POWER · MONTHLY/POINT</span>
+  </div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="controls glass filterbar">
+    <span class="console-label">FILTER CONSOLE ▸</span>
+    <select id="yearSelect" title="Select telemetry year"></select>
+    <span class="switch" id="normSwitch" title="Overlay every parameter as % of its own series max"><span class="track"></span><span id="normLabel">NORMALIZE SERIES</span></span>
+    <span id="flaggedNote" class="console-label" style="color:var(--warn)"></span>
+  </div>
+
+  <div class="grid-main">
+    <div class="glass wide2">
+      <div class="panel-head">
+        <h3>Multi-year trajectories &nbsp;<span class="tag">LINE // ANN 2015 → 2025</span></h3>
+      </div>
+      <div class="controls" style="margin-bottom:14px;gap:8px" id="paramChips"></div>
+      <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <div class="glass">
+      <div class="panel-head"><h3>Annual cycle &nbsp;<span class="tag">LINE // MONTHLY PROFILE</span></h3></div>
+      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+      <div id="profileNote">TSOIL1 SOIL TEMP · TOP LAYER</div>
+    </div>
+
+    <div class="glass">
+      <div class="panel-head"><h3>Precipitation pulse &nbsp;<span class="tag">BAR // MM/DAY</span></h3></div>
+      <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+      <div id="barNote"></div>
+    </div>
+
+    <div class="glass" id="donutBox">
+      <div class="panel-head">
+        <h3 id="segTitle">Seasonal shares &nbsp;<span class="tag">DONUT // PRECIP</span></h3>
+        <span class="controls" id="donutToggle">
+          <span class="chip on" data-mode="season" style="--c:#ff7a18">SEASONS</span>
+          <span class="chip" data-mode="param" style="--c:#c9702e">PARAMETERS</span>
+        </span>
+      </div>
+      <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div><b>DATA</b> NASA POWER CERES SYN1DE Monthly/Point · <b>METRIC</b> GIS-ready</div>
+    <div>−999 SENTINELS FILTERED CLIENT-SIDE · RENDER FULLY LOCAL</div>
+    <div>© CLIMATE COMMAND CONSOLE</div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* =====================================================================
+   1 · RAW TELEMETRY (NASA POWER monthly/point, New Delhi 28.6209N 77.0907E)
+       keys: 12 monthly values JAN..DEC + ANN (NASA annual aggregate)
+       Note: T2M_MAX / T2M_MIN annual = NASA yearly-extreme convention
+   ===================================================================== */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const YEARS  = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+
+const RAW = {
+  PRECTOTCORR: {label:"Precipitation", unit:"mm/day", color:"#ff7a18",
+    ann:{2015:1.79,2016:1.71,2017:1.68,2018:2.05,2019:1.65,2020:1.86,2021:3.00,2022:2.18,2023:2.15,2024:2.21,2025:2.59},
+    monthly:{2015:[0.84,0.15,2.72,1.21,0.17,2.32,6.73,5.85,0.87,0.26,0.06,0.03],
+             2016:[0.00,0.05,0.69,0.00,1.11,1.74,10.40,5.15,1.02,0.15,0.00,0.00],
+             2017:[1.00,0.01,0.45,0.50,0.71,5.01,3.87,4.71,3.58,0.00,0.01,0.18],
+             2018:[0.09,0.07,0.02,0.65,0.56,2.04,10.29,4.39,6.08,0.06,0.12,0.03],
+             2019:[1.26,0.82,0.32,0.59,0.87,0.42,5.93,5.13,2.13,0.84,0.47,0.85],
+             2020:[0.96,0.55,2.21,0.48,1.53,1.60,6.64,7.06,0.85,0.00,0.14,0.02],
+             2021:[1.36,0.12,0.13,0.12,3.46,2.24,11.94,5.24,8.40,2.50,0.00,0.18],
+             2022:[2.79,0.76,0.00,0.02,1.31,2.46,6.41,2.10,7.16,3.09,0.00,0.00],
+             2023:[1.17,0.00,2.07,0.49,2.57,3.59,8.69,3.69,2.66,0.26,0.31,0.02],
+             2024:[0.12,0.65,0.47,0.28,0.01,3.15,5.51,8.51,6.76,0.03,0.00,1.02],
+             2025:[0.22,0.28,0.05,0.12,3.29,3.30,7.65,9.67,4.81,1.38,0.00,0.00]}},
+  QV2M: {label:"Specific Humidity", unit:"g/kg", color:"#ffb066",
+    ann:{2015:9.13,2016:9.10,2017:9.07,2018:9.70,2019:10.07,2020:10.33,2021:10.83,2022:10.62,2023:11.03,2024:10.62,2025:10.88},
+    monthly:{2015:[4.57,4.73,7.35,8.84,6.39,11.86,18.32,18.38,12.21,7.88,5.68,2.95],
+             2016:[3.18,3.01,5.54,5.26,8.51,13.06,19.48,20.20,15.03,8.54,3.93,3.11],
+             2017:[4.29,4.31,4.60,5.07,7.90,14.17,18.81,18.19,14.32,7.59,5.29,3.94],
+             2018:[2.93,3.88,4.19,6.31,7.09,13.83,19.34,19.92,17.21,10.52,6.59,4.19],
+             2019:[4.11,5.44,5.77,7.21,7.82,10.35,17.86,19.97,18.26,10.78,8.19,4.81],
+             2020:[5.43,5.36,8.16,8.84,9.10,14.31,18.91,21.04,16.55,7.02,4.87,4.12],
+             2021:[4.93,4.77,5.12,4.51,9.78,14.29,19.14,20.31,19.93,13.57,7.58,5.53],
+             2022:[6.28,6.28,7.28,4.80,8.41,11.49,19.43,19.11,17.56,12.68,8.52,5.17],
+             2023:[4.65,5.09,7.63,7.95,9.95,15.50,21.06,20.07,17.38,9.95,7.50,5.20],
+             2024:[4.05,4.66,5.12,6.22,6.58,11.99,21.25,21.33,19.95,12.91,8.09,4.99],
+             2025:[4.68,5.13,4.83,5.21,11.98,14.83,20.49,20.99,18.66,12.33,6.08,4.87]}},
+  T2M_MAX: {label:"Max Temperature", unit:"°C", color:"#ff4d2e",
+    ann:{2015:46.25,2016:47.06,2017:47.01,2018:46.48,2019:47.94,2020:47.09,2021:44.58,2022:47.37,2023:45.25,2024:48.42,2025:46.21},
+    monthly:{2015:[24.58,31.80,36.81,40.71,46.25,45.60,41.47,37.39,39.05,38.50,31.32,29.03],
+             2016:[28.19,32.83,39.09,43.18,47.06,45.82,41.09,34.97,37.19,36.57,31.65,28.93],
+             2017:[27.00,32.12,41.36,45.37,46.13,47.01,40.39,38.98,37.90,37.37,32.42,27.07],
+             2018:[28.49,33.11,40.18,43.89,46.48,45.81,42.07,35.02,33.84,34.44,32.33,26.69],
+             2019:[27.13,28.52,38.99,43.75,47.07,47.94,45.11,37.72,38.69,34.55,33.08,24.65],
+             2020:[24.71,29.52,33.43,40.48,47.09,45.00,43.03,38.41,37.39,36.96,31.33,30.23],
+             2021:[24.95,34.39,41.85,43.62,41.67,44.58,43.69,34.83,32.98,34.19,28.51,25.33],
+             2022:[24.21,27.83,41.46,46.03,47.37,45.58,41.19,37.75,39.17,33.72,32.21,27.58],
+             2023:[24.22,34.25,34.87,41.17,45.25,43.52,40.69,37.45,38.32,37.80,32.64,26.78],
+             2024:[25.80,31.15,39.88,41.29,48.42,46.98,39.74,34.12,34.62,35.83,33.40,28.04],
+             2025:[26.37,31.33,39.99,43.81,45.17,46.21,38.31,34.97,33.81,32.80,30.92,26.68]}},
+  T2M_MIN: {label:"Min Temperature", unit:"°C", color:"#ffe0b0",
+    ann:{2015:2.90,2016:4.04,2017:1.43,2018:2.01,2019:0.30,2020:1.64,2021:0.92,2022:3.15,2023:-0.28,2024:3.32,2025:3.72},
+    monthly:{2015:[2.90,5.48,7.18,15.66,22.65,24.65,23.88,23.77,19.27,14.84,10.97,3.14],
+             2016:[4.04,5.63,11.92,19.52,24.98,28.54,24.94,23.98,21.75,14.54,10.38,6.61],
+             2017:[1.43,5.49,8.32,15.28,23.98,26.23,25.58,25.39,18.15,15.40,8.08,4.38],
+             2018:[4.07,5.41,12.12,17.37,23.66,26.94,24.89,24.20,19.25,15.03,8.82,2.01],
+             2019:[1.51,3.99,7.54,15.65,22.21,26.49,26.18,23.99,22.52,15.98,10.86,0.30],
+             2020:[1.64,3.88,9.23,14.34,22.81,24.16,25.01,24.46,20.38,14.10,8.22,2.77],
+             2021:[2.06,6.15,11.75,15.52,21.25,25.10,25.33,23.29,21.61,12.94,8.45,0.92],
+             2022:[3.15,5.17,9.73,18.87,23.86,24.80,25.83,24.60,22.78,14.83,8.44,3.16],
+             2023:[-0.28,5.76,14.64,14.88,18.58,21.11,25.86,24.56,20.57,16.23,11.48,5.82],
+             2024:[3.32,4.73,5.46,17.51,18.50,27.91,26.94,23.97,22.35,17.83,11.52,4.19],
+             2025:[3.72,6.07,8.51,15.36,22.15,24.51,24.77,24.51,19.90,15.97,8.70,5.62]}},
+  TSOIL1: {label:"Soil Temp (0-10cm)", unit:"°C", color:"#d98a45",
+    ann:{2015:25.82,2016:26.59,2017:26.12,2018:25.70,2019:25.88,2020:25.39,2021:24.77,2022:25.58,2023:25.08,2024:25.87,2025:24.99},
+    monthly:{2015:[12.43,17.47,20.94,27.95,36.15,37.12,32.33,30.55,29.88,27.23,21.83,15.53],
+             2016:[14.81,17.70,24.52,32.31,37.39,38.82,32.33,29.08,29.02,26.40,20.05,16.47],
+             2017:[14.18,17.19,23.54,31.98,37.30,36.41,32.29,31.47,28.93,25.34,19.07,15.23],
+             2018:[13.25,18.82,25.38,31.32,36.42,38.00,32.78,29.29,26.88,23.77,19.06,13.20],
+             2019:[12.24,15.10,20.93,30.97,34.87,39.55,35.03,30.71,30.43,25.82,21.64,12.83],
+             2020:[12.31,15.55,20.98,28.60,34.83,36.78,34.53,30.49,29.84,25.70,19.19,15.63],
+             2021:[12.60,17.60,25.66,30.30,33.39,34.83,33.20,28.94,27.14,23.72,16.69,12.79],
+             2022:[11.57,14.43,23.67,32.30,36.43,37.26,33.16,30.87,30.55,23.22,18.83,14.11],
+             2023:[11.71,17.73,23.41,27.90,31.57,34.40,31.18,30.26,30.05,26.21,20.57,15.68],
+             2024:[12.62,16.14,22.88,30.92,37.38,39.45,33.13,29.11,27.98,25.62,20.81,14.23],
+             2025:[13.35,17.83,24.04,32.11,34.06,35.93,31.12,28.89,27.37,23.56,17.12,14.22]}},
+  WS10M: {label:"Wind Speed 10m", unit:"m/s", color:"#a8764f",
+    ann:{2015:2.83,2016:2.72,2017:2.90,2018:2.78,2019:2.88,2020:2.84,2021:2.78,2022:2.89,2023:2.76,2024:2.89,2025:2.93},
+    monthly:{2015:[2.70,2.69,2.89,2.59,3.60,3.13,3.23,2.75,3.02,2.35,2.22,2.73],
+             2016:[2.31,2.64,2.77,3.51,3.11,2.92,2.32,2.52,2.35,2.64,2.85,2.72],
+             2017:[2.74,3.21,3.23,3.73,3.02,3.14,3.04,3.02,2.38,2.08,2.52,2.72],
+             2018:[2.88,2.95,3.14,3.01,2.78,3.62,2.56,2.49,2.90,2.08,2.49,2.48],
+             2019:[2.98,2.90,3.22,3.10,3.73,3.41,3.01,2.68,2.34,2.17,2.67,2.33],
+             2020:[2.65,3.26,2.83,2.93,3.39,2.74,3.00,3.03,2.20,2.39,2.63,2.99],
+             2021:[2.92,2.50,3.27,3.36,2.99,2.67,2.83,2.46,3.15,2.49,2.29,2.37],
+             2022:[2.57,2.99,2.88,3.05,2.95,3.52,3.14,3.19,2.70,2.28,2.59,2.86],
+             2023:[2.65,3.12,2.36,2.84,3.28,3.54,2.43,3.20,2.90,2.56,2.09,2.22],
+             2024:[2.11,2.86,3.16,3.34,3.60,4.25,2.89,2.94,2.28,2.33,2.24,2.66],
+             2025:[2.81,2.92,3.28,3.23,3.51,3.29,3.13,3.00,3.02,1.94,2.44,2.62]}}
+};
+
+/* =====================================================================
+   2 · DATA SANITIZER — NASA fill sentinel (-999), nulls, NaN → null
+   ===================================================================== */
+const FILL = -999.0;
+function sanitize(v){
+  if (v === null || v === undefined) return null;
+  const n = Number(v);
+  return Number.isFinite(n) && n > FILL ? Math.round(n*100)/100 : null;
+}
+let flagged = 0;
+function cleanSeries(arr){
+  return arr.map(v => {
+    if (v === null || v === undefined || Number(v) <= FILL || !Number.isFinite(Number(v))) { flagged++; return null; }
+    return Math.round(Number(v)*100)/100;
+  });
+}
+function cleanDS(rawRaw){
+  const out = {label: rawRaw.label, unit: rawRaw.unit, color: rawRaw.color, ann:{}, monthly:{}};
+  for (const y of YEARS) {
+    out.ann[y] = sanitize(rawRaw.ann[y]);
+    out.monthly[y] = cleanSeries(rawRaw.monthly[y]);
+  }
+  return out;
+}
+const DS = {};
+for (const k in RAW){ DS[k] = cleanDS(RAW[k]); DS[k].key = k; }
+const PARAMS = [];
+const byId = {};
+function syncRegistry(){
+  for (const k in DS) byId[k] = DS[k];
+  PARAMS.length = 0;
+  for (const k in RAW) if (DS[k]) PARAMS.push(DS[k]);
+}
+syncRegistry();
+function noteFlagged(){
+  const el = document.getElementById("flaggedNote");
+  if (el) el.textContent = flagged > 0 ? `⚠ ${flagged} SENTINEL VALUE(S) −999 FILTERED` : "";
+}
+noteFlagged();
+
+/* helpers */
+const mean = a => { const v = a.filter(x => x !== null); return v.length ? v.reduce((s,x)=>s+x,0)/v.length : null; };
+const fmt  = (v, d=2) => v === null ? "—" : v.toFixed(d);
+const hexA = (hex, a) => {
+  const h = hex.replace("#","");
+  const s = h.length === 3 ? h.split("").map(c=>c+c).join("") : h;
+  const n = parseInt(s,16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+};
+
+/* =====================================================================
+   3 · BACKGROUND PARTICLE FIELD — cursor-reactive, canvas (no WebGL)
+   ===================================================================== */
+(function(){
+  const cv = document.getElementById("starfield"), ctx = cv.getContext("2d");
+  let W,H,stars=[],mouse={x:-999,y:-999};
+  function size(){ W = cv.width = innerWidth; H = cv.height = innerHeight;
+    stars = Array.from({length: Math.min(170, W/9)}, () => ({
+      x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.6+.4,
+      vx:(Math.random()-.5)*.12, vy:(Math.random()-.5)*.12, a:Math.random()*.5+.15}));
+  }
+  addEventListener("resize", size); size();
+  addEventListener("mousemove", e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+  addEventListener("mouseleave", () => { mouse.x=-999; });
+  (function tick(){
+    ctx.clearRect(0,0,W,H);
+    for (const s of stars){
+      const dx=s.x-mouse.x, dy=s.y-mouse.y, d2=dx*dx+dy*dy, R=170;
+      if (d2 < R*R){ const f=(1-Math.sqrt(d2)/R); s.x+=dx/(Math.sqrt(d2)||1)*f*1.35; s.y+=dy/(Math.sqrt(d2)||1)*f*1.35; }
+      s.x=(s.x+s.vx+W)%W; s.y=(s.y+s.vy+H)%H;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7);
+      ctx.fillStyle=`rgba(150,116,80,${s.a*.22})`; ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* =====================================================================
+   4 · STATE + CONTROLS
+   ===================================================================== */
+const state = { year:"ALL", trend: new Set(["T2M_MAX","T2M_MIN","TSOIL1"]), norm:false, donut:"season" };
+
+/* clock (IST) */
+setInterval(()=>{ const d=new Date();
+  document.getElementById("clock").textContent =
+    `${d.toLocaleTimeString("en-GB",{hour12:false,timeZone:"Asia/Kolkata"})} IST`;
+},1000);
+
+/* year dropdown */
+const ySel = document.getElementById("yearSelect");
+ySel.innerHTML = `<option value="ALL">ALL YEARS · 2015–2025 MEAN</option>` +
+  YEARS.map(y=>`<option value="${y}">${y}</option>`).join("");
+ySel.addEventListener("change", ()=>{ state.year = ySel.value; renderAll(); });
+
+/* trend parameter chips */
+const chipsBox = document.getElementById("paramChips");
+PARAMS.forEach(p=>{
+  const c = document.createElement("span");
+  c.className = "chip" + (state.trend.has(p.key) ? " on" : "");
+  c.style.setProperty("--c", p.color);
+  c.textContent = `${p.label} ${p.unit}`;
+  c.onclick = ()=>{
+    if (state.trend.has(p.key)) state.trend.delete(p.key);
+    else state.trend.add(p.key);
+    if (state.trend.size === 0) state.trend.add(p.key);
+    chipsBox.querySelectorAll(".chip").forEach(el=>el.classList.remove("on"));
+    chipsBox.querySelectorAll(".chip").forEach(el=>{
+      const key = el.dataset.k; if (state.trend.has(key)) el.classList.add("on");
+    });
+    renderTrend();
+  };
+  c.dataset.k = p.key;
+  chipsBox.appendChild(c);
+});
+/* keep chip .on initial state in sync via dataset (re-color) */
+chipsBox.querySelectorAll(".chip").forEach(el=>{ if (state.trend.has(el.dataset.k)) el.classList.add("on"); });
+
+/* normalize switch */
+const sw = document.getElementById("normSwitch");
+sw.onclick = ()=>{ state.norm = !state.norm; sw.classList.toggle("on", state.norm);
+  sw.querySelector("#normLabel").textContent = state.norm ? "NORMALIZE · % OF MAX" : "NORMALIZE SERIES";
+  renderProfile(); };
+
+/* donut mode toggle */
+document.querySelectorAll("#donutToggle .chip").forEach(c=>{
+  c.onclick = ()=>{
+    document.querySelectorAll("#donutToggle .chip").forEach(x=>x.classList.remove("on"));
+    c.classList.add("on"); state.donut = c.dataset.mode; renderDonut();
+  };
+});
+
+/* =====================================================================
+   5 · KPI CARDS
+   ===================================================================== */
+function kpis(){
+  let peak=null, cold=null;
+  for (const y of YEARS){
+    for (let m=0;m<12;m++){
+      const mx = byId.T2M_MAX.monthly[y][m];
+      const mn = byId.T2M_MIN.monthly[y][m];
+      if (mx!==null && (!peak || mx>peak.v)) peak={v:mx,y,m};
+      if (mn!==null && (!cold || mn<cold.v)) cold={v:mn,y,m};
+    }
+  }
+  const wet = YEARS.map(y=>({y,v:byId.PRECTOTCORR.ann[y]})).reduce((a,b)=>b.v>a.v?b:a);
+  const hum = mean(YEARS.map(y=>byId.QV2M.ann[y]));
+  const wind= mean(YEARS.map(y=>byId.WS10M.ann[y]));
+  const cards = [
+    {c:"#ff5d1a", l:"PEAK RECORD // T2M MAX", v:`${fmt(peak.v)}°C`, s:`${MONTHS[peak.m]} · <b>${peak.y}</b> — thermal apex of the record`},
+    {c:"#ff9a45", l:"WETTEST YEAR // PRECIP", v:`${fmt(wet.v)}<small style="font-size:.5em"> mm/day</small>`, s:`<b>${wet.y}</b> — heaviest annual climatology`},
+    {c:"#e0a86f", l:"MEAN HUMIDITY // QV2M", v:`${fmt(hum,1)}<small style="font-size:.5em"> g/kg</small>`, s:`11-yr specific humidity average at 2 m`},
+    {c:"#a8764f", l:"MEAN WIND // WS10M", v:`${fmt(wind)}<small style="font-size:.5em"> m/s</small>`, s:`11-yr surface wind average at 10 m`}
+  ];
+  document.getElementById("kpis").innerHTML = cards.map(c=>`
+    <div class="kpi" style="--accent:${c.c}">
+      <div class="k-label">${c.l}</div>
+      <div class="k-val">${c.v}</div>
+      <div class="k-sub">${c.s}</div>
+    </div>`).join("");
+}
+
+/* =====================================================================
+   6 · CHART DEFAULTS  (graph_theme: warm ember on near-black)
+   ===================================================================== */
+const TICK = "#8a7d6f", TICK_ACTIVE = "#f0a463";
+const gridSoft = "rgba(255,255,255,.055)";
+const tickFont = {family:"'Poppins',sans-serif", size:9.5};
+Chart.defaults.font.family = "'Poppins',sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = "#94877a";
+
+const tooltipStyle = {
+  backgroundColor:"rgba(11,9,8,.95)", borderColor:"rgba(255,122,24,.45)", borderWidth:1,
+  titleColor:"#ffd9a8", bodyColor:"#ddd0c1",
+  titleFont:{family:"'Poppins',sans-serif", size:11, weight:"500"},
+  bodyFont:{family:"'Poppins',sans-serif", size:10.5},
+  padding:12, cornerRadius:12, displayColors:true, boxPadding:5, boxWidth:7, boxHeight:7,
+  usePointStyle:true
+};
+const legendStyle = {position:"top", align:"end", labels:{usePointStyle:true, pointStyle:"circle",
+  boxWidth:7, boxHeight:7, padding:16, color:"#9a8b7b", font:tickFont}};
+
+/* ember glow pass — the halo around lines, points and bars */
+const emberGlow = {
+  id:"emberGlow",
+  beforeDatasetDraw(chart){ const c = chart.ctx; c.save();
+    c.shadowColor = "rgba(255,122,24,.38)"; c.shadowBlur = 10; c.shadowOffsetX = 0; c.shadowOffsetY = 0; },
+  afterDatasetDraw(chart){ chart.ctx.restore(); }
+};
+/* hot caps at the tip of every highlighted bar */
+const barCaps = {
+  id:"barCaps",
+  afterDatasetsDraw(chart){
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((ds, di)=>{
+      if (di !== 0) return;
+      const meta = chart.getDatasetMeta(di);
+      if (!meta || meta.hidden || meta.type !== "bar") return;
+      meta.data.forEach((el, i)=>{
+        const v = ds.data[i]; if (v === null || v === undefined) return;
+        const r = 9;
+        const g = ctx.createRadialGradient(el.x, el.y, 0, el.x, el.y, r);
+        g.addColorStop(0, "rgba(255,244,222,.95)");
+        g.addColorStop(.32, "rgba(255,178,96,.62)");
+        g.addColorStop(1, "rgba(255,122,24,0)");
+        ctx.save();
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(el.x, el.y, r, 0, 7); ctx.fill();
+        ctx.fillStyle = "#fff6e6"; ctx.beginPath(); ctx.arc(el.x, el.y, 1.9, 0, 7); ctx.fill();
+        ctx.restore();
+      });
+    });
+  }
+};
+
+/* gradient checkpoint fills (graph_theme area charts) */
+function areaFill(chart, hexTop, top, mid){
+  const area = chart.chartArea;
+  if (!area) return hexA(hexTop, top);
+  const g = chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+  g.addColorStop(0, hexA(hexTop, top));
+  g.addColorStop(.55, hexA(hexTop, mid));
+  g.addColorStop(1, hexA(hexTop, 0));
+  return g;
+}
+function barFill(chart, strong){
+  const area = chart.chartArea;
+  if (!area) return strong ? "rgba(255,122,24,.85)" : "rgba(198,158,124,.4)";
+  const g = chart.ctx.createLinearGradient(0, area.bottom, 0, area.top);
+  if (strong){
+    g.addColorStop(0, "rgba(255,122,24,.95)");
+    g.addColorStop(.55, "rgba(255,122,24,.4)");
+    g.addColorStop(1, "rgba(255,176,102,.06)");
+  } else {
+    g.addColorStop(0, "rgba(198,152,112,.55)");
+    g.addColorStop(1, "rgba(198,152,112,.04)");
+  }
+  return g;
+}
+
+/* =====================================================================
+   7 · CHART 1 — MULTI-YEAR LINE (ANN per year, multi-parameter)
+   ===================================================================== */
+const trendChart = new Chart(document.getElementById("trendChart"), {
+  type:"line", data:{labels:YEARS, datasets:[]},
+  options:{responsive:true, maintainAspectRatio:false, interaction:{mode:"index", intersect:false},
+    plugins:{legend:legendStyle, tooltip:tooltipStyle},
+    scales:{
+      x:{border:{display:false},
+         grid:{color:gridSoft, drawTicks:false, tickLength:0},
+         ticks:{color:(c)=> c.index === c.scale.ticks.length - 1 ? TICK_ACTIVE : TICK,
+                font:tickFont, padding:10, maxRotation:0}},
+      y:{border:{display:false}, grid:{display:false},
+         ticks:{color:TICK, font:tickFont, padding:10, maxTicksLimit:6}}
+    }},
+  plugins:[emberGlow]
+});
+
+/* =====================================================================
+   8 · CHART 2 — MONTHLY PROFILE LINE (selected year, normalize toggle)
+   ===================================================================== */
+const profileChart = new Chart(document.getElementById("profileChart"), {
+  type:"line", data:{labels:MONTHS, datasets:[]},
+  options:{responsive:true, maintainAspectRatio:false, interaction:{mode:"index", intersect:false},
+    plugins:{legend:legendStyle, tooltip:tooltipStyle},
+    scales:{
+      x:{border:{display:false}, grid:{color:gridSoft, drawTicks:false, tickLength:0},
+         ticks:{color:TICK, font:tickFont, padding:8, maxRotation:0}},
+      y:{border:{display:false}, grid:{color:"rgba(255,255,255,.07)", drawTicks:false, tickLength:0},
+         ticks:{color:TICK, font:tickFont, padding:10, maxTicksLimit:6,
+                callback:v => state.norm ? v+"%" : v+"°"}}
+    }},
+  plugins:[emberGlow]
+});
+
+/* =====================================================================
+   9 · CHART 3 — MONTHLY PRECIP BARS (selected year vs 11-yr mean)
+   ===================================================================== */
+const barChart = new Chart(document.getElementById("barChart"), {
+  type:"bar", data:{labels:MONTHS, datasets:[]},
+  options:{responsive:true, maintainAspectRatio:false, interaction:{mode:"index", intersect:false},
+    plugins:{legend:legendStyle, tooltip:tooltipStyle},
+    scales:{
+      x:{border:{display:false}, grid:{display:false},
+         ticks:{color:TICK, font:tickFont, padding:8, maxRotation:0}},
+      y:{border:{display:false}, grid:{color:"rgba(255,255,255,.06)", drawTicks:false, tickLength:0},
+         ticks:{color:TICK, font:tickFont, padding:10, maxTicksLimit:5}}
+    }},
+  plugins:[emberGlow, barCaps]
+});
+
+/* =====================================================================
+   10 · CHART 4 — DONUT (season precip / parameter annual mean)
+   ===================================================================== */
+const SEASONS = [["Winter","Dec–Feb",["Dec","Jan","Feb"],["#ffe0b0","#ffd9a8","#e8b98a"]],
+                 ["Pre-Monsoon","Mar–May",["Mar","Apr","May"],["#ffd08a","#ffb066","#f19a4a"]],
+                 ["Monsoon","Jun–Sep",["Jun","Jul","Aug","Sep"],["#ff9a45","#ff7a18","#ff5d1a","#e2621a"]],
+                 ["Post-Monsoon","Oct–Nov",["Oct","Nov"],["#d98a45","#c9702e"]]];
+const SEG = ["#ff7a18","#ffb066","#ff4d2e","#ffe0b0","#d98a45","#a8764f"];
+const centerText = {id:"centerText", afterDraw(chart){
+  const {ctx} = chart, {left,right,top,bottom} = chart.chartArea;
+  const x=(left+right)/2, y=(top+bottom)/2;
+  const total = chart.$total ?? "";
+  const maxW = (right-left)*0.62;
+  ctx.save(); ctx.textAlign="center";
+  ctx.font="300 25px 'Fraunces'"; ctx.fillStyle="#ffd9a8";
+  ctx.fillText(total, x, y+2, maxW);
+  ctx.font="300 9px 'Poppins'"; ctx.fillStyle="#94877a";
+  ctx.fillText(chart.$unit||"", x, y+20, maxW);
+  ctx.restore();
+}};
+const donutChart = new Chart(document.getElementById("donutChart"), {
+  type:"doughnut", data:{labels:[], datasets:[]}, options:{
+    responsive:true, maintainAspectRatio:false, cutout:"66%",
+    plugins:{legend:{position:"bottom", labels:{usePointStyle:true, pointStyle:"circle",
+      boxWidth:7, boxHeight:7, padding:14, color:"#9a8b7b", font:tickFont}}, tooltip:tooltipStyle}
+  }, plugins:[centerText]
+});
+
+/* =====================================================================
+   11 · RENDERERS
+   ===================================================================== */
+function renderTrend(){
+  const ds = [...state.trend].map(key => {
+    const p = byId[key];
+    return {label:`${p.label} · ANN (${p.unit})`, data:YEARS.map(y=>p.ann[y]), borderColor:p.color,
+      backgroundColor:(ctx)=> areaFill(ctx.chart, p.color, .26, .09),
+      fill:true, borderWidth:2, tension:.38,
+      pointRadius:2.8, pointHoverRadius:7,
+      pointBackgroundColor:"#fff3e2", pointBorderColor:p.color, pointBorderWidth:1.6,
+      pointHoverBackgroundColor:"#fff", pointHoverBorderColor:p.color, pointHoverBorderWidth:2.4};
+  });
+  trendChart.data.datasets = ds;
+  trendChart.update();
+}
+
+function selYear(){
+  return state.year === "ALL" ? YEARS : [Number(state.year)];
+}
+function seriesFor(p, y){
+  if (y !== undefined) {
+    const arr = p.monthly[y];
+    return state.norm
+      ? arr.map(v => v === null ? null : Math.round(v*100/Math.max(...arr.filter(x=>x!==null)) * 100)/100)
+      : arr;
+  }
+  const meanArr = MONTHS.map((_,m)=> mean(YEARS.map(y2=>p.monthly[y2][m])));
+  return meanArr;
+}
+
+function renderProfile(){
+  const isAll = state.year === "ALL";
+  const years = isAll ? [] : [Number(state.year)];
+  const maxData = isAll ? seriesFor(byId.T2M_MAX) : seriesFor(byId.T2M_MAX, years[0]);
+  const minData = isAll ? seriesFor(byId.T2M_MIN) : seriesFor(byId.T2M_MIN, years[0]);
+  const yTag = isAll ? "11-yr Mean" : years[0];
+  const hot = {label:`Max Temp ${yTag}`,
+    backgroundColor:(ctx)=> (state.norm || isAll) ? "transparent" : areaFill(ctx.chart, "#ff7a18", .42, .12),
+    fill:!state.norm && !isAll,
+    data:maxData, borderColor:"#ff7a18", borderWidth:2.3, tension:.4,
+    pointRadius:2.4, pointHoverRadius:7,
+    pointBackgroundColor:"#fff3e2", pointBorderColor:"#ff7a18", pointBorderWidth:1.5};
+  const min = {label:`Min Temp ${yTag}`, data:minData, borderColor:"#c9906a",
+    borderWidth:1.6, borderDash:[5,4], tension:.4, pointRadius:0, pointHoverRadius:6,
+    pointBackgroundColor:"#ffd9a8", pointBorderColor:"#c9906a", pointBorderWidth:1.4, fill:false};
+  profileChart.data.datasets = [hot, min];
+  profileChart.options.plugins.legend = legendStyle;
+  profileChart.options.scales.y.ticks.callback = v => state.norm ? v+"%" : v+"°";
+  profileChart.update();
+  document.getElementById("profileNote").textContent =
+    (isAll ? "11-YEAR MEAN · " : "") + "T2M MAX vs T2M MIN" +
+    (state.norm ? " · NORMALIZED % OF SERIES MAX" : "");
+}
+
+function renderBar(){
+  const years = selYear(), P = byId.PRECTOTCORR;
+  const meanArr = MONTHS.map((_,m)=> mean(YEARS.map(y=>P.monthly[y][m])));
+  const total = arr => (arr.filter(v=>v!==null).reduce((s,v)=>s+v,0)).toFixed(1);
+  const datasets = [];
+  if (state.year !== "ALL") {
+    const monthly = P.monthly[Number(state.year)];
+    datasets.push({label:`${state.year} Monthly`, data:monthly,
+      backgroundColor:(ctx)=> barFill(ctx.chart, ctx.dataIndex>=5 && ctx.dataIndex<=8),
+      borderRadius:3, borderSkipped:false, barPercentage:.52, categoryPercentage:.82});
+  }
+  datasets.push({label: state.year === "ALL" ? "11-yr Mean" : "11-yr Mean",
+    data:meanArr,
+    backgroundColor: state.year === "ALL"
+      ? (ctx)=> barFill(ctx.chart, ctx.dataIndex>=5 && ctx.dataIndex<=8)
+      : "rgba(198,158,124,.22)",
+    borderRadius:3, borderSkipped:false, barPercentage:.52, categoryPercentage:.82});
+  barChart.data.datasets = datasets;
+  barChart.update();
+  const mmYear = years.map(y=> total(P.monthly[y]));
+  document.getElementById("barNote").textContent =
+    state.year === "ALL" ? `11-YEAR MEAN MONTHLY PROFILE · Σ(monthly climatology) ≈ ${(mmYear.reduce((a,b)=>+a+ +b,0)/mmYear.length).toFixed(1)} mm/day · MONSOON Jun–Sep DOMINANT` :
+    `${state.year} Σ(monthly) ≈ ${mmYear[0]} mm/day · MONSOON Jun–Sep GLOWS AMBER`;
+}
+
+function renderDonut(){
+  if (state.donut === "season"){
+    const years = selYear(), P = byId.PRECTOTCORR;
+    // proportional share = seasonal SUM of monthly climatology (not month-average)
+    const data = SEASONS.map(([,,idx]) => {
+      const perMonth = idx.map(name => MONTHS.indexOf(name))
+        .map(m => mean(years.map(y => P.monthly[y][m])) ?? 0);
+      return Math.round(perMonth.reduce((s,v)=>s+v,0) * 100) / 100;
+    });
+    const total = data.reduce((a,b)=>a+b,0);
+    donutChart.data = {labels:SEASONS.map(([n,range]) => `${n} (${range})`),
+      datasets:[{data, backgroundColor:SEASONS.map(s=>s[3][1]),
+        borderColor:"rgba(10,9,8,.9)", borderWidth:2, hoverOffset:8, spacing:1}]};
+    donutChart.$unit = "Σ MONTHLY · mm/day";
+    donutChart.$total = total.toFixed(1);
+    document.getElementById("segTitle").innerHTML = 'Seasonal shares &nbsp;<span class="tag">DONUT // PRECIP</span>';
+  } else {
+    const years = selYear();
+    const data = PARAMS.map(p => mean(years.map(y=>p.ann[y])) ?? 0);
+    const map = {PRECTOTCORR:0,QV2M:1,T2M_MAX:2,T2M_MIN:3,TSOIL1:4,WS10M:5};
+    donutChart.data = {labels:PARAMS.map(p=>`${p.label} (${p.unit})`),
+      datasets:[{data, backgroundColor:PARAMS.map(p=>SEG[map[p.key]]),
+        borderColor:"rgba(10,9,8,.9)", borderWidth:2, hoverOffset:8, spacing:1}]};
+    donutChart.$unit = "PARAMETER MEAN SHARE";
+    donutChart.$total = "—";
+    document.getElementById("segTitle").innerHTML = 'Parameter mix &nbsp;<span class="tag">DONUT // ANN MEAN</span>';
+  }
+  donutChart.update();
+}
+
+/* =====================================================================
+   12 · STATIONS — switchable location, NASA POWER monthly/point (AG)
+   ===================================================================== */
+const PARAM_KEYS = ["PRECTOTCORR","QV2M","T2M_MAX","T2M_MIN","TSOIL1","WS10M"];
+const LOCATIONS = [
+  {key:"delhi",     name:"New Delhi", lat:28.6209, lon:77.0907},
+  {key:"mumbai",    name:"Mumbai",    lat:19.0760, lon:72.8777},
+  {key:"chennai",   name:"Chennai",   lat:13.0827, lon:80.2707},
+  {key:"kolkata",   name:"Kolkata",   lat:22.5726, lon:88.3639},
+  {key:"bengaluru", name:"Bengaluru", lat:12.9716, lon:77.5946},
+  {key:"jaipur",    name:"Jaipur",    lat:26.9124, lon:75.7873}
+];
+const STATION_CACHE = new Map();
+const locChips = document.getElementById("locChips");
+const locStatus = document.getElementById("locStatus");
+let activeStation = LOCATIONS[0];
+let stationBusy = false;
+
+function setLocStatus(msg, kind){
+  locStatus.textContent = msg || "";
+  locStatus.className = "loc-status" + (kind ? " " + kind : "");
+}
+function stationUrl(loc){
+  return "https://power.larc.nasa.gov/api/temporal/monthly/point" +
+    `?parameters=${PARAM_KEYS.join(",")}&community=AG` +
+    `&longitude=${loc.lon}&latitude=${loc.lat}` +
+    `&start=${YEARS[0]}&end=${YEARS[YEARS.length-1]}&format=JSON`;
+}
+async function fetchStation(loc){
+  const res = await fetch(stationUrl(loc), {headers:{Accept:"application/json"}});
+  if (!res.ok) throw new Error(`NASA POWER HTTP ${res.status}`);
+  const json = await res.json();
+  const prm = json && json.properties && json.properties.parameter;
+  if (!prm) throw new Error("NASA POWER payload missing parameters");
+  const out = {};
+  for (const key of PARAM_KEYS){
+    const series = prm[key] || {};
+    const ds = {label:RAW[key].label, unit:RAW[key].unit, color:RAW[key].color, ann:{}, monthly:{}};
+    for (const y of YEARS){
+      const row = [];
+      for (let m = 1; m <= 12; m++){
+        row.push(sanitize(series[`${y}${String(m).padStart(2,"0")}`]));
+      }
+      ds.monthly[y] = row;
+      const annual = series[`${y}13`];
+      ds.ann[y] = (annual === undefined || annual === null) ? mean(row) : sanitize(annual);
+    }
+    out[key] = ds;
+  }
+  return out;
+}
+function applyStation(rawMap){
+  flagged = 0;
+  for (const key of PARAM_KEYS){
+    DS[key] = cleanDS(rawMap[key]);
+    DS[key].key = key;
+  }
+  syncRegistry();
+  noteFlagged();
+}
+function updateStationLabels(loc){
+  const h = document.getElementById("heroTitle");
+  if (h){
+    h.textContent = `${loc.name} atmospheric`;
+    h.appendChild(document.createElement("br"));
+    h.appendChild(document.createTextNode("telemetry 2015–2025"));
+  }
+  const sub = document.getElementById("brandSub");
+  if (sub) sub.textContent = `AGROCLIMATOLOGY GRID // ${loc.name.toUpperCase()} STATION`;
+  const la = document.getElementById("coordLat"), lo = document.getElementById("coordLon");
+  if (la) la.textContent = loc.lat.toFixed(4);
+  if (lo) lo.textContent = loc.lon.toFixed(4);
+  document.title = `NASA POWER · ${loc.name} Climate 2015–2025`;
+  locChips.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.loc === loc.key));
+  if (loc.searched && !locChips.querySelector(`.chip[data-loc="${loc.key}"]`)){
+    locChips.querySelectorAll(".chip.search-added").forEach(c => c.remove());
+    const chip = document.createElement("span");
+    chip.className = "chip loc search-added on";
+    chip.dataset.loc = loc.key;
+    chip.style.setProperty("--c", "#ff9a45");
+    chip.textContent = loc.name;
+    chip.onclick = () => selectStation(loc);
+    locChips.appendChild(chip);
+  }
+}
+async function selectStation(loc){
+  if (stationBusy) return;
+  if (activeStation && activeStation.key === loc.key){ updateStationLabels(loc); return; }
+  const prev = activeStation;
+  stationBusy = true;
+  locChips.classList.add("busy");
+  setLocStatus("SYNCING NASA POWER…", "busy");
+  try{
+    let data = STATION_CACHE.get(loc.key);
+    if (!data){ data = await fetchStation(loc); STATION_CACHE.set(loc.key, data); }
+    applyStation(data);
+    activeStation = loc;
+    updateStationLabels(loc);
+    renderAll(); renderTrend();
+    setLocStatus(`SYNCED · ${loc.lat.toFixed(4)}° N ${loc.lon.toFixed(4)}° E`);
+  } catch(err){
+    if (loc.key === "delhi"){
+      applyStation(RAW);
+      activeStation = LOCATIONS[0];
+      updateStationLabels(LOCATIONS[0]);
+      renderAll(); renderTrend();
+      setLocStatus("OFFLINE · DELHI SNAPSHOT", "err");
+    } else {
+      if (prev) updateStationLabels(prev);
+      setLocStatus(`SYNC FAILED · ${err.message}`, "err");
+    }
+  } finally {
+    stationBusy = false;
+    locChips.classList.remove("busy");
+  }
+}
+LOCATIONS.forEach((loc, i) => {
+  const c = document.createElement("span");
+  c.className = "chip loc" + (i === 0 ? " on" : "");
+  c.dataset.loc = loc.key;
+  c.style.setProperty("--c", ["#e8a05c","#d98a45","#c9702e","#b8794a","#e0b184","#a8764f"][i % 6]);
+  c.textContent = loc.name;
+  c.onclick = () => selectStation(loc);
+  locChips.appendChild(c);
+});
+/* =====================================================================
+   13 · CITY SEARCH — Open-Meteo geocoding → NASA POWER station
+   ===================================================================== */
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]));
+const cityInput = document.getElementById("citySearch");
+const resultsBox = document.getElementById("searchResults");
+const searchStatus = document.getElementById("searchStatus");
+let searchTimer = null, searchSeq = 0, searchList = [], searchIndex = -1;
+
+function closeSearch(){
+  resultsBox.classList.remove("open");
+  resultsBox.innerHTML = "";
+  searchList = [];
+  searchIndex = -1;
+}
+function paintSearchIndex(){
+  resultsBox.querySelectorAll(".result").forEach((b, i) => b.classList.toggle("active", i === searchIndex));
+}
+function showSearchResults(list){
+  if (!list.length){
+    closeSearch();
+    searchStatus.textContent = "NO MATCHES";
+    return;
+  }
+  searchStatus.textContent = "";
+  searchList = list;
+  searchIndex = -1;
+  resultsBox.innerHTML = list.map((c, i) => `
+      <button class="result" type="button" data-i="${i}">
+        <span class="r-name">${esc(c.name)}</span>
+        <span class="r-coord">${Number(c.latitude).toFixed(2)}°, ${Number(c.longitude).toFixed(2)}°</span>
+        <span class="r-meta">${esc([c.admin1, c.country].filter(Boolean).join(" · "))}</span>
+      </button>`).join("") +
+    '<div class="r-foot">GEOCODING · OPEN-METEO</div>';
+  resultsBox.querySelectorAll(".result").forEach(btn => {
+    btn.onclick = () => pickCity(list[Number(btn.dataset.i)]);
+  });
+  resultsBox.classList.add("open");
+}
+async function searchCities(q){
+  const seq = ++searchSeq;
+  searchStatus.textContent = "SEARCHING…";
+  try{
+    const url = "https://geocoding-api.open-meteo.com/v1/search?name=" +
+      encodeURIComponent(q) + "&count=6&language=en&format=json";
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+    if (seq !== searchSeq) return;
+    showSearchResults((json.results || []).filter(r =>
+      Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude))));
+  } catch(err){
+    if (seq !== searchSeq) return;
+    closeSearch();
+    searchStatus.textContent = "SEARCH FAILED";
+  }
+}
+function pickCity(city){
+  const loc = {
+    key: "geo:" + Number(city.latitude).toFixed(3) + "," + Number(city.longitude).toFixed(3),
+    name: city.name,
+    lat: Number(Number(city.latitude).toFixed(4)),
+    lon: Number(Number(city.longitude).toFixed(4)),
+    searched: true
+  };
+  closeSearch();
+  cityInput.value = "";
+  cityInput.blur();
+  searchStatus.textContent = "";
+  selectStation(loc);
+}
+cityInput.addEventListener("input", () => {
+  const q = cityInput.value.trim();
+  clearTimeout(searchTimer);
+  if (q.length < 2){ closeSearch(); searchStatus.textContent = ""; return; }
+  searchTimer = setTimeout(() => searchCities(q), 380);
+});
+cityInput.addEventListener("keydown", e => {
+  if (e.key === "Escape"){ closeSearch(); cityInput.blur(); return; }
+  if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+    if (!searchList.length) return;
+    e.preventDefault();
+    searchIndex = e.key === "ArrowDown"
+      ? (searchIndex + 1) % searchList.length
+      : (searchIndex - 1 + searchList.length) % searchList.length;
+    paintSearchIndex();
+    return;
+  }
+  if (e.key === "Enter" && searchList.length){
+    e.preventDefault();
+    pickCity(searchList[searchIndex < 0 ? 0 : searchIndex]);
+  }
+});
+document.addEventListener("click", e => {
+  if (!e.target.closest(".searchbox")) closeSearch();
+});
+
+updateStationLabels(LOCATIONS[0]);
+
+function renderAll(){ kpis(); renderProfile(); renderBar(); renderDonut(); }
+renderAll();
+renderTrend();
+
+/* fade out boot screen */
+addEventListener("load", ()=> setTimeout(()=>{ const b=document.getElementById("boot");
+  b.style.opacity=0; setTimeout(()=>b.remove(), 550); }, 350));
+setTimeout(()=>{ const b=document.getElementById("boot"); if (document.body.contains(b))
+  { b.style.opacity=0; setTimeout(()=>b.remove(), 550); } }, 2200);
+</script>
+</body>
+</html>
