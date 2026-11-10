@@ -334,6 +334,392 @@
     .wrap{padding:16px 14px 30px;margin:12px 10px 30px;border-radius:26px}
     .brand h1{font-size:1rem}
   }
+
+  /* Inline AI interpretation beside the multi-year graph */
+  .trend-analysis-layout{
+    display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr);
+    gap:18px;align-items:stretch
+  }
+  .trend-chart-area{min-width:0}
+  .ai-insight-panel{
+    min-width:0;min-height:344px;padding:18px 18px 16px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.82);
+    background:linear-gradient(155deg,rgba(255,255,255,.55),rgba(255,255,255,.22));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 12px 28px -24px rgba(60,44,28,.55);
+    display:flex;flex-direction:column;gap:12px
+  }
+  .ai-insight-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .ai-insight-title{
+    color:var(--ink);font-size:.72rem;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;display:flex;align-items:center;gap:9px
+  }
+  .ai-insight-title::before{
+    content:"";display:inline-block;width:19px;height:3px;border-radius:9px;
+    background:linear-gradient(90deg,var(--ember),var(--orange-lt));
+    box-shadow:0 0 12px rgba(255,122,24,.35)
+  }
+  .ai-insight-model{
+    color:var(--ink-faint);font-family:var(--mono);font-size:.53rem;
+    letter-spacing:.12em;white-space:nowrap
+  }
+  .ai-insight-status{
+    color:var(--ink-dim);font-size:.66rem;letter-spacing:.045em;line-height:1.5
+  }
+  .ai-insight-status.loading::after{
+    content:"";display:inline-block;width:12px;height:12px;margin-left:8px;
+    vertical-align:-2px;border:2px solid rgba(217,138,69,.22);
+    border-top-color:var(--orange);border-radius:50%;animation:sp .8s linear infinite
+  }
+  .ai-insight-content{
+    color:var(--ink-dim);font-size:.73rem;line-height:1.75;
+    overflow-wrap:anywhere
+  }
+  .ai-insight-content h4{
+    color:var(--ink);font-size:.7rem;font-weight:600;letter-spacing:.06em;
+    margin:2px 0 7px;text-transform:uppercase
+  }
+  .ai-insight-content ul{list-style:none;display:grid;gap:9px;padding:0;margin:0}
+  .ai-insight-content li{
+    position:relative;padding-left:15px
+  }
+  .ai-insight-content li::before{
+    content:"";position:absolute;left:0;top:.68em;width:6px;height:6px;
+    border-radius:50%;background:var(--orange);box-shadow:0 0 8px rgba(255,122,24,.3)
+  }
+  .ai-insight-content strong{color:var(--ink);font-weight:600}
+  .ai-insight-content p{margin:0 0 8px}
+  .ai-insight-empty{
+    border:1px dashed rgba(115,104,87,.2);border-radius:14px;padding:14px;
+    color:var(--ink-faint);font-size:.68rem;line-height:1.65
+  }
+  .ai-insight-foot{
+    margin-top:auto;padding-top:9px;border-top:1px solid var(--line);
+    color:var(--ink-faint);font-family:var(--mono);font-size:.52rem;
+    letter-spacing:.09em;line-height:1.6
+  }
+  @media(max-width:1200px){
+    .trend-analysis-layout{grid-template-columns:1fr}
+    .ai-insight-panel{min-height:210px}
+  }
+
+
+  /* VANGUARD MONOCHROME IDENTITY: chart canvases retain their original orange/black palette */
+  :root{
+    --paper:#f1f1f1;--paper-2:#e7e7e7;--ink:#171717;--ink-dim:#555;--ink-faint:#858585;
+    --line:rgba(0,0,0,.13);--brd:rgba(255,255,255,.86);
+    --amber:#bdbdbd;--ember:#171717;--orange:#ff7a18;--orange-lt:#ffb066;
+    --void:#090909;--void-2:#151515;--ok:#7bd6a1;--warn:#a33b25;
+  }
+  body{
+    background:radial-gradient(900px 600px at 8% -10%,#fff,transparent 65%),
+      radial-gradient(900px 700px at 95% 0%,#dedede,transparent 62%),
+      linear-gradient(180deg,#e9e9e9,#f7f7f7 55%,#e8e8e8);
+  }
+  #liquid{opacity:.22;filter:blur(80px) grayscale(1)}
+  .lb1,.lb2,.lb3,.lb4{background:radial-gradient(circle,rgba(255,255,255,.85),rgba(120,120,120,0) 70%)}
+  .wrap{
+    border-color:rgba(255,255,255,.8);
+    background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(238,238,238,.93) 38%,rgba(250,250,250,.96));
+    box-shadow:0 55px 120px -75px rgba(0,0,0,.32),inset 0 1px 0 #fff;
+  }
+  .wrap::before{opacity:.24;filter:blur(60px)}
+  header.topbar{
+    background:linear-gradient(100deg,rgba(8,8,8,.94),rgba(38,38,38,.9));
+    border-color:rgba(0,0,0,.18);box-shadow:0 20px 44px -30px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.16)
+  }
+  .brand h1{color:#fff;letter-spacing:.08em;font-family:var(--sans);font-size:1rem;font-weight:600}
+  .brand-divider{color:#aaa;font-weight:300}
+  .brand .sub{color:rgba(255,255,255,.62)}
+  .pill{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+  .hero::before{background:radial-gradient(65% 80% at 24% 36%,rgba(0,0,0,.12),transparent 75%)}
+  .hero h2{background:linear-gradient(100deg,#171717,#777);-webkit-background-clip:text;background-clip:text;color:transparent;filter:none}
+  .hero p{color:#555;text-shadow:none}
+  .coords{color:#555;background:linear-gradient(150deg,rgba(20,20,20,.94),rgba(55,55,55,.88));border-color:rgba(0,0,0,.15)}
+  .coords b{color:#fff}
+  .logo.vanguard-logo{width:54px;height:54px;border-radius:50%;overflow:hidden;background:#050505;border:1px solid rgba(255,255,255,.45);box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+  .vanguard-logo img{width:100%;height:100%;object-fit:cover}
+  .team-intro{
+    display:grid;grid-template-columns:150px minmax(0,1fr);gap:32px;align-items:center;
+    padding:22px 26px;margin:0 4px 22px;border-radius:24px;
+    background:linear-gradient(125deg,rgba(255,255,255,.94),rgba(232,232,232,.8));
+    border:1px solid rgba(255,255,255,.96);box-shadow:0 22px 50px -40px rgba(0,0,0,.4),inset 0 1px 0 #fff
+  }
+  .team-mark{width:136px;height:136px;border-radius:20px;overflow:hidden;background:#050505;border:1px solid #222;box-shadow:0 12px 30px -18px #000}
+  .team-mark img{width:100%;height:100%;object-fit:cover}
+  .team-kicker{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;color:#777;font-weight:600}
+  .team-kicker span{color:#111;margin:0 5px}
+  .team-copy h3{font-family:var(--serif);font-size:2rem;font-weight:400;color:#171717;margin:7px 0}
+  .team-copy p{max-width:none;width:100%;color:#444;font-size:1rem;line-height:1.9;letter-spacing:.005em}
+  .team-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+  .team-tags span{font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;padding:6px 9px;border-radius:999px;background:#171717;color:#fff}
+  .glass{border-color:rgba(255,255,255,.92);background:linear-gradient(150deg,rgba(255,255,255,.78),rgba(240,240,240,.62));box-shadow:0 18px 42px -35px rgba(0,0,0,.35),inset 0 1px 0 #fff}
+  .chip{border-color:#ddd;background:linear-gradient(160deg,#fff,#eee);color:#555}
+  .chip.on{color:#fff}
+  .ai-insight-panel,.ai-graph-note,.vanguard-insight{
+    border:1px solid rgba(255,255,255,.95);
+    background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(235,235,235,.82));
+    box-shadow:0 16px 36px -30px rgba(0,0,0,.38),inset 0 1px 0 #fff
+  }
+  .ai-insight-title::before{background:#111;box-shadow:none}
+  .ai-insight-status,.ai-insight-content,.ai-note-content{color:#555}
+  .ai-insight-content strong,.ai-note-content strong{color:#111}
+  .ai-insight-content li::before{background:#ff7a18}
+  .ai-insight-foot{border-color:rgba(0,0,0,.12)}
+  .ai-graph-note{margin-top:14px;padding:14px 16px;border-radius:16px}
+  .ai-note-label{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:.54rem;letter-spacing:.14em;color:#222;font-weight:600}
+  .ai-note-label span{color:#888;font-weight:400}
+  .ai-note-content{font-size:.7rem;line-height:1.65;margin-top:8px;min-height:34px}
+  .ai-note-content ul,.overall-ai-content ul{list-style:none;display:grid;gap:8px;padding:0;margin:0}
+  .ai-note-content li,.overall-ai-content li{position:relative;padding-left:20px;color:#444;font-size:.72rem;line-height:1.65}
+  .ai-note-content li::before,.overall-ai-content li::before{content:"✦";position:absolute;left:0;color:#111;font-size:.75rem}
+  .vanguard-insight{margin-top:24px;padding:26px 28px;border-radius:26px}
+  .vanguard-insight-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:20px}
+  .vanguard-insight h2{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.35rem);font-weight:400;color:#111;margin:7px 0}
+  .vanguard-insight-top p{font-size:.78rem;color:#666;line-height:1.6}
+  .brief-status{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;color:#777;border:1px solid #ddd;border-radius:999px;padding:8px 12px;white-space:nowrap}
+  .overall-ai-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .overall-ai-content li{background:rgba(255,255,255,.68);border:1px solid #e4e4e4;border-radius:15px;padding:13px 14px 13px 38px}
+  .overall-ai-content li::before{left:15px;top:14px;font-size:1rem}
+  .overall-ai-content strong{color:#111}
+  .ai-overall-placeholder{grid-column:1/-1;padding:18px;border:1px dashed #ccc;border-radius:16px;color:#777;font-size:.75rem}
+  .vanguard-insight .ai-insight-foot{margin-top:18px}
+  .foot{border-color:rgba(0,0,0,.14)}
+  @media(max-width:760px){
+    .team-intro{grid-template-columns:76px 1fr;padding:17px;gap:15px}
+    .team-mark{width:72px;height:72px}
+    .overall-ai-content{grid-template-columns:1fr}
+    .vanguard-insight-top{display:block}
+    .brief-status{display:inline-block;margin-top:12px}
+  }
+
+
+  /* VANGUARD NIGHT MODE · deep graphite with blue/green data accents */
+  :root{
+    --paper:#090e13;--paper-2:#0d151c;--ink:#f1f6f8;--ink-dim:#b5c2ca;--ink-faint:#82939e;
+    --line:rgba(150,190,205,.16);--brd:rgba(180,220,235,.16);
+    --amber:#70d6c4;--ember:#35c6a5;--orange:#4bb9e8;--orange-lt:#8be2ed;
+    --void:#05090d;--void-2:#0a1118;--ok:#75e0b2;--warn:#ff9c76;
+  }
+  body{
+    background:
+      radial-gradient(950px 620px at 10% -12%,rgba(32,107,140,.28),transparent 66%),
+      radial-gradient(900px 650px at 95% 4%,rgba(23,118,91,.2),transparent 64%),
+      linear-gradient(180deg,#070c11,#0b131a 55%,#070c11);
+    color:#eaf2f5;
+  }
+  #liquid{opacity:.34;filter:blur(88px) hue-rotate(125deg) saturate(.8)}
+  .wrap{
+    background:linear-gradient(180deg,rgba(14,23,31,.97),rgba(9,16,22,.985) 45%,rgba(8,14,20,.99));
+    border-color:rgba(180,220,235,.18);
+    box-shadow:0 55px 120px -75px rgba(0,0,0,.82),inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .wrap::before{opacity:.16;filter:blur(70px)}
+  header.topbar{
+    background:linear-gradient(100deg,rgba(4,10,15,.97),rgba(12,27,36,.96));
+    border-color:rgba(130,190,210,.2);
+    box-shadow:0 20px 44px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08)
+  }
+  .brand h1{color:#f5fbfd}
+  .brand .sub{color:#91a6b2}
+  .pill{background:rgba(130,190,210,.08);border-color:rgba(150,205,220,.2);color:#c3d1d8}
+  .hero h2{background:linear-gradient(100deg,#f2f7f8,#8cc9d7);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:#afc0c8}
+  .coords{
+    color:#b3c4cc;background:linear-gradient(145deg,rgba(17,34,44,.96),rgba(10,22,30,.94));
+    border-color:rgba(140,195,215,.18)
+  }
+  .coords b{color:#edf8fb}
+  .team-intro,.glass,.ai-insight-panel,.ai-graph-note,.vanguard-insight{
+    background:linear-gradient(145deg,rgba(20,34,44,.96),rgba(11,21,29,.96));
+    border:1px solid rgba(139,190,207,.18);
+    box-shadow:0 18px 42px -34px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.045);
+  }
+  .team-intro{grid-template-columns:150px minmax(0,1fr);gap:32px;padding:30px 34px}
+  .team-mark{width:136px;height:136px;border-color:rgba(110,210,220,.35);box-shadow:0 14px 34px -18px #000}
+  .team-kicker{color:#7fa2b0}
+  .team-kicker span{color:#54d5b8}
+  .team-copy h3{color:#f0f7f9;font-size:2rem}
+  .team-copy p{max-width:none;width:100%;color:#c0cdd3;font-size:1rem;line-height:1.9}
+  .team-tags span{background:#102b35;color:#a8f0df;border:1px solid rgba(88,210,183,.2)}
+  .chip{background:linear-gradient(160deg,#15232d,#0d171f);border-color:#2b414d;color:#b5c5cc}
+  .chip.on{color:#071116}
+  .ai-insight-title,.ai-note-label{color:#e4f0f3}
+  .ai-insight-status,.ai-insight-content,.ai-note-content{color:#b8c7ce}
+  .ai-insight-content strong,.ai-note-content strong{color:#f4fbfd}
+  .ai-insight-content li::before{background:#57d8b6;box-shadow:0 0 9px rgba(87,216,182,.38)}
+  .ai-insight-foot{border-color:rgba(150,200,215,.16);color:#829ba7}
+  .ai-note-label span{color:#75b9c5}
+  .ai-note-content li,.overall-ai-content li{color:#c2d0d6}
+  .vanguard-insight h2{color:#f2f8fa}
+  .vanguard-insight-top p{color:#aebfc7}
+  .brief-status{color:#9ab3be;border-color:#2b424e;background:rgba(8,18,25,.4)}
+  .overall-ai-content{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+    align-items:stretch;
+  }
+  .overall-ai-content ul{display:contents}
+  .overall-ai-content li{
+    min-width:0;min-height:92px;display:flex;align-items:flex-start;
+    background:linear-gradient(145deg,rgba(25,47,58,.82),rgba(13,28,37,.88));
+    border:1px solid rgba(110,185,199,.16);border-radius:15px;
+    padding:14px 15px 14px 42px;color:#c7d6dc;font-size:.72rem;line-height:1.6;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)
+  }
+  .overall-ai-content li::before{
+    left:15px;top:14px;color:#60d9bd;font-size:1rem;
+  }
+  .ai-overall-placeholder{background:rgba(9,19,26,.55);border-color:#2c4652;color:#9db1bb}
+  .foot{border-color:rgba(150,200,215,.16);color:#8197a2}
+  .console-label,.panel-head h3{color:#c4d3da}
+  .loc-status{color:#8ba4af}
+  @media(max-width:900px){
+    .team-intro{grid-template-columns:100px minmax(0,1fr);gap:20px;padding:22px}
+    .team-mark{width:92px;height:92px}
+    .team-copy h3{font-size:1.6rem}
+    .team-copy p{font-size:.88rem}
+    .overall-ai-content{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:560px){
+    .team-intro{grid-template-columns:1fr}
+    .overall-ai-content{grid-template-columns:1fr}
+  }
+
+
+  /* FINAL READABILITY + CHART SURFACE FIX */
+  .kpi{
+    background:linear-gradient(145deg,rgba(24,43,55,.98),rgba(12,25,34,.98)) !important;
+    border:1px solid rgba(123,190,207,.28) !important;
+    box-shadow:0 18px 38px -28px rgba(0,0,0,.9),inset 0 1px 0 rgba(225,249,255,.08) !important;
+  }
+  .kpi .k-label{
+    color:#91c7d5 !important;font-weight:700 !important;opacity:1 !important;
+    text-shadow:none !important;
+  }
+  .kpi .k-val{
+    color:#f4fbff !important;font-weight:600 !important;
+    text-shadow:0 2px 16px rgba(67,183,232,.12) !important;
+  }
+  .kpi .k-sub{color:#c5d6de !important;font-weight:500 !important}
+  .kpi .k-sub b{color:#ffffff !important;font-weight:750 !important}
+  .chart-wrap{
+    background:
+      radial-gradient(125% 110% at 50% 0%,rgba(27,77,91,.62),rgba(10,25,34,.98) 68%),
+      linear-gradient(160deg,#10232d,#08141c) !important;
+    border:1px solid rgba(94,174,192,.32) !important;
+    box-shadow:inset 0 1px 0 rgba(220,250,255,.07),
+               inset 0 -35px 75px -55px rgba(44,190,164,.26),
+               0 22px 44px -32px rgba(0,0,0,.9) !important;
+  }
+  .panel-head h3,.console-label{color:#d7e8ee !important}
+  .tag{color:#8dc9d7 !important;border-color:rgba(113,188,204,.25) !important}
+  .vanguard-insight{
+    background:linear-gradient(145deg,rgba(17,35,46,.99),rgba(9,21,29,.99)) !important;
+    border:1px solid rgba(117,184,202,.28) !important;
+    box-shadow:0 22px 50px -35px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05) !important;
+  }
+  .vanguard-insight h2{color:#f4fbff !important;text-shadow:0 2px 16px rgba(67,183,232,.12)}
+  .vanguard-insight-top p{color:#c2d4dc !important}
+  .brief-status{color:#b9d5df !important;border-color:rgba(125,190,207,.3) !important}
+  .overall-ai-content{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:12px !important;
+    align-items:stretch !important;
+  }
+  .overall-ai-content .field-note-card{
+    display:block !important;min-width:0;min-height:126px;
+    padding:15px 16px !important;border-radius:15px;
+    background:linear-gradient(145deg,rgba(24,49,61,.96),rgba(12,29,39,.98)) !important;
+    border:1px solid rgba(100,177,196,.25) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 12px 24px -22px #000;
+    overflow:hidden;
+  }
+  .field-note-card-head{
+    display:flex;align-items:center;gap:9px;margin-bottom:10px;
+  }
+  .field-note-number{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:27px;height:25px;border-radius:7px;
+    color:#07151c;background:linear-gradient(135deg,#79e0c1,#6bc7e8);
+    font:800 .65rem var(--mono);letter-spacing:.04em;flex:0 0 auto;
+  }
+  .field-note-label{
+    color:#91cbd8 !important;font:750 .57rem var(--mono);
+    letter-spacing:.14em;line-height:1.3;
+  }
+  .overall-ai-content .field-note-card p{
+    display:block !important;margin:0 !important;padding:0 !important;
+    color:#edf7fa !important;font:600 .78rem/1.65 var(--sans) !important;
+    white-space:normal !important;overflow-wrap:anywhere !important;
+    word-break:normal !important;opacity:1 !important;
+    text-shadow:none !important;
+  }
+  .overall-ai-content .field-note-card p::before{content:none !important}
+  .overall-ai-content .field-note-card strong{color:#ffffff !important;font-weight:800 !important}
+  .overall-ai-content ul{display:contents !important}
+  .overall-ai-content li{
+    display:block !important;white-space:normal !important;
+    color:#edf7fa !important;opacity:1 !important;
+    overflow-wrap:anywhere !important;word-break:normal !important;
+  }
+  .overall-ai-content li::before{color:#6fe0c2 !important}
+  .ai-note-content,.ai-note-content li{color:#d1e0e6 !important}
+  .ai-note-content strong{color:#ffffff !important}
+  .ai-note-content li::before{color:#70dfc1 !important}
+  .ai-insight-foot{color:#91aab5 !important;border-color:rgba(130,190,207,.18) !important}
+  @media(max-width:900px){
+    .overall-ai-content{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  }
+  @media(max-width:560px){
+    .overall-ai-content{grid-template-columns:1fr !important}
+    .overall-ai-content .field-note-card{min-height:0}
+    .kpi .k-val{font-size:2.1rem}
+  }
+
+
+  /* Vanguard dark search and period controls */
+  .searchbox{
+    background:linear-gradient(145deg,#172b38,#0b1922)!important;
+    border:1px solid rgba(111,190,207,.48)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 10px 24px -18px #000!important;
+  }
+  .searchbox:focus-within{border-color:#63d1bd!important;box-shadow:0 0 0 3px rgba(70,200,174,.16)!important}
+  .searchbox input{color:#f3fbff!important;-webkit-text-fill-color:#f3fbff!important;caret-color:#63d1bd!important}
+  .searchbox input::placeholder{color:#a3bac5!important;-webkit-text-fill-color:#a3bac5!important;opacity:1!important}
+  .searchbox svg{color:#8dc5d2!important}
+  #searchStatus{color:#9dc4ce!important}
+  #searchResults{
+    background:linear-gradient(155deg,rgba(16,36,48,.99),rgba(7,19,28,.99))!important;
+    border:1px solid rgba(111,190,207,.45)!important;
+    box-shadow:0 28px 58px -25px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08)!important;
+    backdrop-filter:blur(24px) saturate(125%)!important;
+    -webkit-backdrop-filter:blur(24px) saturate(125%)!important;
+  }
+  #searchResults .result{color:#edf8fb!important}
+  #searchResults .result:hover,#searchResults .result.active{background:linear-gradient(110deg,rgba(37,139,153,.42),rgba(35,125,101,.30))!important}
+  #searchResults .r-name{color:#f4fbfd!important;font-weight:700!important}
+  #searchResults .r-meta{color:#bfd0d7!important}
+  #searchResults .r-coord{color:#8fd7d0!important;font-weight:600!important}
+  #searchResults .r-foot{color:#8db3bf!important}
+  #yearSelect{
+    color:#f3fbff!important;
+    background-color:#112632!important;
+    background-image:linear-gradient(145deg,#1b3a49,#10232e)!important;
+    border:1px solid rgba(111,190,207,.48)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 22px -18px #000!important;
+    color-scheme:dark;
+  }
+  #yearSelect:hover,#yearSelect:focus{border-color:#63d1bd!important;outline:none!important;box-shadow:0 0 0 3px rgba(70,200,174,.15)!important}
+  #yearSelect option{background:#10232e!important;color:#f3fbff!important}
+  .field-note-grid,.ai-overall-grid,#aiOverallContent{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;align-items:stretch!important;
+  }
+  .field-note-card{min-width:0!important;overflow-wrap:anywhere!important;background:linear-gradient(145deg,rgba(21,48,59,.94),rgba(10,27,37,.96))!important;border:1px solid rgba(94,174,177,.3)!important}
+  .field-note-card p{color:#e7f2f5!important;line-height:1.55!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  @media(max-width:760px){.field-note-grid,.ai-overall-grid,#aiOverallContent{grid-template-columns:1fr!important}}
+
 </style>
 </head>
 <body>
@@ -346,12 +732,12 @@
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" fill="#ffb066"/><ellipse cx="12" cy="12" rx="9.4" ry="3.3" stroke="#ffffff" stroke-opacity=".85" stroke-width="1.1" transform="rotate(-24 12 12)"/><ellipse cx="12" cy="12" rx="9.4" ry="3.3" stroke="#ffffff" stroke-opacity=".85" stroke-width="1.1" transform="rotate(24 12 12)"/></svg>
+      <div class="logo vanguard-logo">
+        <img src="data:image/jpeg;base64,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" alt="Vanguard team logo" />
       </div>
       <div>
-        <h1>NASA POWER · Climate</h1>
-        <div class="sub" id="brandSub">AGROCLIMATOLOGY GRID // NEW DELHI STATION</div>
+        <h1>VANGUARD <span class="brand-divider">/</span> NASA POWER</h1>
+        <div class="sub" id="brandSub">STUDENT RESEARCH COLLECTIVE // EARTH TRENDS</div>
       </div>
     </div>
     <div class="hud-right">
@@ -363,12 +749,22 @@
   <section class="hero">
     <div>
       <h2 id="heroTitle">New Delhi atmospheric<br/>telemetry 2015–2025</h2>
-      <p>Eleven years of NASA POWER monthly agroclimatology, decoded into a live console — thermal stress, monsoon pulses, humidity, soil heat and surface winds on one glass flight deck.</p>
+      <p>Exploring Earth's changing climate through NASA POWER data. We turn eleven years of temperature, rainfall, humidity, soil heat and wind observations into clear, interactive stories.</p>
     </div>
     <div class="coords">
       LAT <b id="coordLat">28.6209</b>° N · LON <b id="coordLon">77.0907</b>° E<br/>
       COMMUNITY <b>AG</b> · FORMAT <b>MONTHLY/POINT JSON</b><br/>
       SOURCE <b>power.larc.nasa.gov</b>
+    </div>
+  </section>
+
+  <section class="team-intro glass" aria-label="About Team Vanguard">
+    <div class="team-mark"><img src="data:image/jpeg;base64,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" alt="Vanguard V logo" /></div>
+    <div class="team-copy">
+      <div class="team-kicker">WHO WE ARE <span>·</span> TEAM VANGUARD</div>
+      <h3>Curiosity first. Ideas into action.</h3>
+      <p>We’re a group of curious and driven students excited about space, technology, problem-solving, and building things that actually work. We may not be professional programmers or aerospace engineers, but we’re comfortable with Python, data, research, and learning new technologies quickly.</p>
+      <div class="team-tags"><span>PYTHON</span><span>DATA & RESEARCH</span><span>SPACE & TECHNOLOGY</span><span>BUILD · TEST · LEARN</span></div>
     </div>
   </section>
 
@@ -399,19 +795,42 @@
         <h3>Multi-year trajectories &nbsp;<span class="tag">LINE // ANN 2015 → 2025</span></h3>
       </div>
       <div class="controls" style="margin-bottom:14px;gap:8px" id="paramChips"></div>
-      <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+      <div class="trend-analysis-layout">
+        <div class="trend-chart-area">
+          <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+        </div>
+        <aside class="ai-insight-panel" id="aiInsightPanel" aria-live="polite">
+          <div class="ai-insight-head">
+            <div class="ai-insight-title">Climate insights</div>
+            <span class="ai-insight-model">NEMOTRON // AI</span>
+          </div>
+          <div class="ai-insight-status" id="aiInsightStatus">Waiting for graph data…</div>
+          <div class="ai-insight-content" id="aiInsightContent">
+            <div class="ai-insight-empty">Select a city or change the parameters above. A short interpretation will appear here automatically.</div>
+          </div>
+          <div class="ai-insight-foot" id="aiInsightFoot">AUTO-ANALYSIS · SELECTED CITY + ACTIVE PARAMETERS</div>
+        </aside>
+      </div>
     </div>
 
     <div class="glass">
       <div class="panel-head"><h3>Annual cycle &nbsp;<span class="tag">LINE // MONTHLY PROFILE</span></h3></div>
       <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
       <div id="profileNote">TSOIL1 SOIL TEMP · TOP LAYER</div>
+      <section class="ai-graph-note" aria-live="polite">
+        <div class="ai-note-label">✦ AI GRAPH READOUT <span id="aiProfileStatus">WAITING</span></div>
+        <div class="ai-note-content" id="aiProfileContent">Select a year or city to generate a temperature-pattern summary.</div>
+      </section>
     </div>
 
     <div class="glass">
       <div class="panel-head"><h3>Precipitation pulse &nbsp;<span class="tag">BAR // MM/DAY</span></h3></div>
       <div class="chart-wrap"><canvas id="barChart"></canvas></div>
       <div id="barNote"></div>
+      <section class="ai-graph-note" aria-live="polite">
+        <div class="ai-note-label">✦ AI GRAPH READOUT <span id="aiPrecipStatus">WAITING</span></div>
+        <div class="ai-note-content" id="aiPrecipContent">A rainfall-pattern summary will appear here.</div>
+      </section>
     </div>
 
     <div class="glass" id="donutBox">
@@ -423,8 +842,27 @@
         </span>
       </div>
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
+      <section class="ai-graph-note" aria-live="polite">
+        <div class="ai-note-label">✦ AI GRAPH READOUT <span id="aiDistributionStatus">WAITING</span></div>
+        <div class="ai-note-content" id="aiDistributionContent">A seasonal or parameter-share interpretation will appear here.</div>
+      </section>
     </div>
   </div>
+
+  <section class="vanguard-insight glass" id="vanguardInsight" aria-live="polite">
+    <div class="vanguard-insight-top">
+      <div>
+        <div class="team-kicker">VANGUARD FIELD NOTES <span>·</span> AI CLIMATE BRIEF</div>
+        <h2>What is the data telling us?</h2>
+        <p>Patterns, possible drivers and standout observations for the currently selected city and year.</p>
+      </div>
+      <div class="brief-status" id="aiOverallStatus">PREPARING BRIEF…</div>
+    </div>
+    <div class="overall-ai-content" id="aiOverallContent">
+      <div class="ai-overall-placeholder">Choose a city and year. Nemotron will connect the patterns across all four graphs.</div>
+    </div>
+    <div class="ai-insight-foot">AI-SUPPORTED INTERPRETATION · NASA POWER DATA · POSSIBLE DRIVERS ARE NOT PROVEN CAUSES</div>
+  </section>
 
   <footer class="foot">
     <div><b>DATA</b> NASA POWER CERES SYN1DE Monthly/Point · <b>METRIC</b> GIS-ready</div>
@@ -550,6 +988,18 @@ function cleanDS(rawRaw){
 }
 const DS = {};
 for (const k in RAW){ DS[k] = cleanDS(RAW[k]); DS[k].key = k; }
+// Consistent Vanguard blue/green palette for every parameter graph.
+const VANGUARD_DATA_COLORS = {
+  T2M_MAX:"#43b7e8",
+  T2M_MIN:"#8bd5ee",
+  TSOIL1:"#35c6a5",
+  QV2M:"#77d9a8",
+  PRECTOTCORR:"#5c91e6",
+  WS10M:"#a2d9c8"
+};
+for (const key in VANGUARD_DATA_COLORS) {
+  if (DS[key]) DS[key].color = VANGUARD_DATA_COLORS[key];
+}
 const PARAMS = [];
 const byId = {};
 function syncRegistry(){
@@ -616,7 +1066,7 @@ setInterval(()=>{ const d=new Date();
 const ySel = document.getElementById("yearSelect");
 ySel.innerHTML = `<option value="ALL">ALL YEARS · 2015–2025 MEAN</option>` +
   YEARS.map(y=>`<option value="${y}">${y}</option>`).join("");
-ySel.addEventListener("change", ()=>{ state.year = ySel.value; renderAll(); });
+ySel.addEventListener("change", ()=>{ state.year = ySel.value; renderAll(); scheduleTrendInsights(); });
 
 /* trend parameter chips */
 const chipsBox = document.getElementById("paramChips");
@@ -634,6 +1084,7 @@ PARAMS.forEach(p=>{
       const key = el.dataset.k; if (state.trend.has(key)) el.classList.add("on");
     });
     renderTrend();
+    scheduleTrendInsights(350, "annual");
   };
   c.dataset.k = p.key;
   chipsBox.appendChild(c);
@@ -651,7 +1102,7 @@ sw.onclick = ()=>{ state.norm = !state.norm; sw.classList.toggle("on", state.nor
 document.querySelectorAll("#donutToggle .chip").forEach(c=>{
   c.onclick = ()=>{
     document.querySelectorAll("#donutToggle .chip").forEach(x=>x.classList.remove("on"));
-    c.classList.add("on"); state.donut = c.dataset.mode; renderDonut();
+    c.classList.add("on"); state.donut = c.dataset.mode; renderDonut(); scheduleTrendInsights(350, "distribution");
   };
 });
 
@@ -688,29 +1139,29 @@ function kpis(){
 /* =====================================================================
    6 · CHART DEFAULTS  (graph_theme: warm ember on near-black)
    ===================================================================== */
-const TICK = "#8a7d6f", TICK_ACTIVE = "#f0a463";
+const TICK = "#8297a3", TICK_ACTIVE = "#73d9c0";
 const gridSoft = "rgba(255,255,255,.055)";
 const tickFont = {family:"'Poppins',sans-serif", size:9.5};
 Chart.defaults.font.family = "'Poppins',sans-serif";
 Chart.defaults.font.size = 11;
-Chart.defaults.color = "#94877a";
+Chart.defaults.color = "#9aadb7";
 
 const tooltipStyle = {
-  backgroundColor:"rgba(11,9,8,.95)", borderColor:"rgba(255,122,24,.45)", borderWidth:1,
-  titleColor:"#ffd9a8", bodyColor:"#ddd0c1",
+  backgroundColor:"rgba(5,13,19,.97)", borderColor:"rgba(75,190,205,.48)", borderWidth:1,
+  titleColor:"#a8eadc", bodyColor:"#d6e3e8",
   titleFont:{family:"'Poppins',sans-serif", size:11, weight:"500"},
   bodyFont:{family:"'Poppins',sans-serif", size:10.5},
   padding:12, cornerRadius:12, displayColors:true, boxPadding:5, boxWidth:7, boxHeight:7,
   usePointStyle:true
 };
 const legendStyle = {position:"top", align:"end", labels:{usePointStyle:true, pointStyle:"circle",
-  boxWidth:7, boxHeight:7, padding:16, color:"#9a8b7b", font:tickFont}};
+  boxWidth:7, boxHeight:7, padding:16, color:"#9ab0ba", font:tickFont}};
 
 /* ember glow pass — the halo around lines, points and bars */
 const emberGlow = {
   id:"emberGlow",
   beforeDatasetDraw(chart){ const c = chart.ctx; c.save();
-    c.shadowColor = "rgba(255,122,24,.38)"; c.shadowBlur = 10; c.shadowOffsetX = 0; c.shadowOffsetY = 0; },
+    c.shadowColor = "rgba(58,194,183,.30)"; c.shadowBlur = 10; c.shadowOffsetX = 0; c.shadowOffsetY = 0; },
   afterDatasetDraw(chart){ chart.ctx.restore(); }
 };
 /* hot caps at the tip of every highlighted bar */
@@ -727,8 +1178,8 @@ const barCaps = {
         const r = 9;
         const g = ctx.createRadialGradient(el.x, el.y, 0, el.x, el.y, r);
         g.addColorStop(0, "rgba(255,244,222,.95)");
-        g.addColorStop(.32, "rgba(255,178,96,.62)");
-        g.addColorStop(1, "rgba(255,122,24,0)");
+        g.addColorStop(.32, "rgba(96,220,196,.62)");
+        g.addColorStop(1, "rgba(67,183,232,0)");
         ctx.save();
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(el.x, el.y, r, 0, 7); ctx.fill();
         ctx.fillStyle = "#fff6e6"; ctx.beginPath(); ctx.arc(el.x, el.y, 1.9, 0, 7); ctx.fill();
@@ -750,15 +1201,15 @@ function areaFill(chart, hexTop, top, mid){
 }
 function barFill(chart, strong){
   const area = chart.chartArea;
-  if (!area) return strong ? "rgba(255,122,24,.85)" : "rgba(198,158,124,.4)";
+  if (!area) return strong ? "rgba(52,198,165,.88)" : "rgba(67,183,232,.35)";
   const g = chart.ctx.createLinearGradient(0, area.bottom, 0, area.top);
   if (strong){
-    g.addColorStop(0, "rgba(255,122,24,.95)");
-    g.addColorStop(.55, "rgba(255,122,24,.4)");
-    g.addColorStop(1, "rgba(255,176,102,.06)");
+    g.addColorStop(0, "rgba(52,198,165,.95)");
+    g.addColorStop(.55, "rgba(52,198,165,.42)");
+    g.addColorStop(1, "rgba(67,183,232,.08)");
   } else {
-    g.addColorStop(0, "rgba(198,152,112,.55)");
-    g.addColorStop(1, "rgba(198,152,112,.04)");
+    g.addColorStop(0, "rgba(67,183,232,.48)");
+    g.addColorStop(1, "rgba(67,183,232,.04)");
   }
   return g;
 }
@@ -817,20 +1268,20 @@ const barChart = new Chart(document.getElementById("barChart"), {
 /* =====================================================================
    10 · CHART 4 — DONUT (season precip / parameter annual mean)
    ===================================================================== */
-const SEASONS = [["Winter","Dec–Feb",["Dec","Jan","Feb"],["#ffe0b0","#ffd9a8","#e8b98a"]],
-                 ["Pre-Monsoon","Mar–May",["Mar","Apr","May"],["#ffd08a","#ffb066","#f19a4a"]],
-                 ["Monsoon","Jun–Sep",["Jun","Jul","Aug","Sep"],["#ff9a45","#ff7a18","#ff5d1a","#e2621a"]],
-                 ["Post-Monsoon","Oct–Nov",["Oct","Nov"],["#d98a45","#c9702e"]]];
-const SEG = ["#ff7a18","#ffb066","#ff4d2e","#ffe0b0","#d98a45","#a8764f"];
+const SEASONS = [["Winter","Dec–Feb",["Dec","Jan","Feb"],["#8bd5ee","#65c5df","#43b7e8"]],
+                 ["Pre-Monsoon","Mar–May",["Mar","Apr","May"],["#5c91e6","#4cace0","#43b7e8"]],
+                 ["Monsoon","Jun–Sep",["Jun","Jul","Aug","Sep"],["#35c6a5","#36bfa8","#3bb7b5","#43b7e8"]],
+                 ["Post-Monsoon","Oct–Nov",["Oct","Nov"],["#77d9a8","#a2d9c8"]]];
+const SEG = ["#35c6a5","#43b7e8","#5c91e6","#8bd5ee","#77d9a8","#a2d9c8"];
 const centerText = {id:"centerText", afterDraw(chart){
   const {ctx} = chart, {left,right,top,bottom} = chart.chartArea;
   const x=(left+right)/2, y=(top+bottom)/2;
   const total = chart.$total ?? "";
   const maxW = (right-left)*0.62;
   ctx.save(); ctx.textAlign="center";
-  ctx.font="300 25px 'Fraunces'"; ctx.fillStyle="#ffd9a8";
+  ctx.font="300 25px 'Fraunces'"; ctx.fillStyle="#b9f2e4";
   ctx.fillText(total, x, y+2, maxW);
-  ctx.font="300 9px 'Poppins'"; ctx.fillStyle="#94877a";
+  ctx.font="300 9px 'Poppins'"; ctx.fillStyle="#8da7b2";
   ctx.fillText(chart.$unit||"", x, y+20, maxW);
   ctx.restore();
 }};
@@ -838,7 +1289,7 @@ const donutChart = new Chart(document.getElementById("donutChart"), {
   type:"doughnut", data:{labels:[], datasets:[]}, options:{
     responsive:true, maintainAspectRatio:false, cutout:"66%",
     plugins:{legend:{position:"bottom", labels:{usePointStyle:true, pointStyle:"circle",
-      boxWidth:7, boxHeight:7, padding:14, color:"#9a8b7b", font:tickFont}}, tooltip:tooltipStyle}
+      boxWidth:7, boxHeight:7, padding:14, color:"#9ab0ba", font:tickFont}}, tooltip:tooltipStyle}
   }, plugins:[centerText]
 });
 
@@ -857,6 +1308,277 @@ function renderTrend(){
   });
   trendChart.data.datasets = ds;
   trendChart.update();
+}
+
+
+/* =====================================================================
+   11A · MULTI-GRAPH AI INTERPRETATION
+   One Nemotron request returns short notes for all four charts + field brief.
+   ===================================================================== */
+let aiInsightTimer = null;
+let aiInsightController = null;
+let aiInsightSequence = 0;
+
+function escapeInsightHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+function renderInsightMarkdown(markdown){
+  const lines = String(markdown || "").replace(/\r/g, "").split("\n");
+  let html = "", listOpen = false;
+  const closeList = () => { if (listOpen){ html += "</ul>"; listOpen = false; } };
+  const inline = text => escapeInsightHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  for (const rawLine of lines){
+    const line = rawLine.trim();
+    if (!line){ closeList(); continue; }
+    const heading = line.match(/^#{1,4}\s+(.+)$/);
+    if (heading){ closeList(); html += `<h4>${inline(heading[1])}</h4>`; continue; }
+    const bullet = line.match(/^(?:[-*•]|\d+[.)])\s+(.+)$/);
+    if (bullet){
+      if (!listOpen){ html += "<ul>"; listOpen = true; }
+      const bulletText = bullet[1].replace(/\uFFFD/g, "").trim();
+      html += `<li>${inline(bulletText)}</li>`; continue;
+    }
+    closeList(); html += `<p>${inline(line)}</p>`;
+  }
+  closeList();
+  return html || '<div class="ai-overall-placeholder">No insight returned for this graph.</div>';
+}
+function setInsightState(status, message, content){
+  const statusEl = document.getElementById("aiInsightStatus");
+  const contentEl = document.getElementById("aiInsightContent");
+  if (statusEl){
+    statusEl.textContent = message;
+    statusEl.classList.toggle("loading", status === "loading");
+  }
+  if (contentEl && content !== undefined) contentEl.innerHTML = content;
+}
+function setInsightCard(contentId, statusId, status, text){
+  const content = document.getElementById(contentId);
+  const statusEl = document.getElementById(statusId);
+  if (statusEl) statusEl.textContent = status;
+  if (content) content.innerHTML = text;
+}
+function scheduleTrendInsights(delay = 350, scope = "all"){
+  clearTimeout(aiInsightTimer);
+  aiInsightTimer = setTimeout(() => generateDashboardInsights(scope), delay);
+}
+function currentMeanMonthly(key){
+  const p = DS[key];
+  const years = state.year === "ALL" ? YEARS : [Number(state.year)];
+  return MONTHS.map((_, month) => {
+    const vals = years.map(y => p.monthly[y][month]).filter(v => v !== null && v !== undefined);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  });
+}
+function currentYearly(key){
+  const p = DS[key];
+  return YEARS.map(year => ({label:String(year), value:p.ann[year]}))
+    .filter(point => point.value !== null && point.value !== undefined);
+}
+function buildDashboardCharts(){
+  const selectedYear = state.year;
+  const trend = [...state.trend].map(key => ({
+    name: DS[key].label, unit: DS[key].unit, points: currentYearly(key)
+  }));
+
+  const maxMonthly = currentMeanMonthly("T2M_MAX");
+  const minMonthly = currentMeanMonthly("T2M_MIN");
+  const temperature = MONTHS.map((month,i)=>({
+    label:month,
+    max_temperature:maxMonthly[i],
+    min_temperature:minMonthly[i]
+  }));
+
+  const precipitation = currentMeanMonthly("PRECTOTCORR");
+  const rainfall = MONTHS.map((month,i)=>({label:month, value:precipitation[i], unit:"mm/day"}));
+
+  let distribution;
+  if (state.donut === "season"){
+    const seasonNames = ["Winter (Dec–Feb)","Pre-monsoon (Mar–May)","Monsoon (Jun–Sep)","Post-monsoon (Oct–Nov)"];
+    const seasonMonths = [[11,0,1],[2,3,4],[5,6,7,8],[9,10]];
+    distribution = seasonNames.map((name,i)=>({
+      label:name,
+      value:seasonMonths[i].reduce((sum,m)=>sum+(precipitation[m] || 0),0)
+    }));
+  } else {
+    distribution = PARAMS.map(p=>{
+      const years = selectedYear === "ALL" ? YEARS : [Number(selectedYear)];
+      const vals = years.map(y=>DS[p.key].ann[y]).filter(v=>v !== null && v !== undefined);
+      return {label:p.label, value:vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null, unit:p.unit};
+    });
+  }
+
+  return [
+    {id:"annual", title:"Multi-year annual trends", description:"Annual values across 2015–2025 for selected parameters.", data:trend},
+    {id:"temperature", title:"Monthly temperature profile", description:`Monthly maximum and minimum temperature for ${selectedYear === "ALL" ? "the 2015–2025 mean" : selectedYear}.`, data:temperature},
+    {id:"precipitation", title:"Monthly precipitation", description:`Monthly precipitation for ${selectedYear === "ALL" ? "the 2015–2025 mean" : selectedYear}.`, data:rainfall},
+    {id:"distribution", title:state.donut === "season" ? "Seasonal precipitation shares" : "Annual parameter mix", description:"Distribution shown in the donut chart.", data:distribution}
+  ];
+}
+async function generateDashboardInsights(scope = "all"){
+  const sequence = ++aiInsightSequence;
+  if (aiInsightController) aiInsightController.abort();
+
+  const allCharts = buildDashboardCharts();
+  const charts = scope === "all"
+    ? allCharts
+    : allCharts.filter(chart => chart.id === scope);
+  const selectedParameters = [...state.trend];
+  const city = activeStation?.name || "Selected location";
+  const year = state.year;
+  const loading = '<div class="ai-overall-placeholder">Reading the selected graph data…</div>';
+
+  // Only show loading state in the panel that is actually being refreshed.
+  if(scope === "all" || scope === "annual"){
+    setInsightState("loading", `Analysing ${city} · ${year === "ALL" ? "2015–2025" : year}…`, loading);
+  }
+  if(scope === "all" || scope === "temperature"){
+    const el=document.getElementById("aiProfileContent"); if(el) el.innerHTML=loading;
+    const status=document.getElementById("aiProfileStatus"); if(status) status.textContent="ANALYSING…";
+  }
+  if(scope === "all" || scope === "precipitation"){
+    const el=document.getElementById("aiPrecipContent"); if(el) el.innerHTML=loading;
+    const status=document.getElementById("aiPrecipStatus"); if(status) status.textContent="ANALYSING…";
+  }
+  if(scope === "all" || scope === "distribution"){
+    const el=document.getElementById("aiDistributionContent"); if(el) el.innerHTML=loading;
+    const status=document.getElementById("aiDistributionStatus"); if(status) status.textContent="ANALYSING…";
+  }
+  const overallStatus=document.getElementById("aiOverallStatus");
+  if(scope === "all" && overallStatus) overallStatus.textContent="ANALYSING SELECTED DATA…";
+
+  aiInsightController = new AbortController();
+  try{
+    const requestBody = JSON.stringify({
+      city,
+      latitude:Number(activeStation?.lat || 0),
+      longitude:Number(activeStation?.lon || 0),
+      period:year === "ALL" ? "2015-2025" : String(year),
+      selected_year:year,
+      analysis_scope:scope,
+      parameters:(scope === "all" || scope === "annual") ? selectedParameters.map(key=>({
+        key,
+        label:DS[key].label,
+        unit:DS[key].unit,
+        values:currentYearly(key).map(point=>({year:Number(point.label),value:point.value}))
+      })) : [],
+      charts
+    });
+
+    let response=null, connectionError=null;
+    for(let attempt=0;attempt<4;attempt++){
+      try{
+        response=await fetch("http://127.0.0.1:8000/analyze-graph",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          signal:aiInsightController.signal,
+          body:requestBody
+        });
+        break;
+      }catch(err){
+        if(err.name==="AbortError") throw err;
+        connectionError=err;
+        if(attempt<3) await new Promise(resolve=>setTimeout(resolve,700*(attempt+1)));
+      }
+    }
+    if(!response) throw new Error(
+      `Cannot reach the AI backend at 127.0.0.1:8000. Start it using: uvicorn ai_backend:app --reload. ${connectionError?.message || ""}`
+    );
+
+    const result=await response.json();
+    if(sequence!==aiInsightSequence) return;
+    if(!response.ok) throw new Error(result.detail || `HTTP ${response.status}`);
+    if(String(result.city || "")!==String(city) ||
+       String(result.selected_year || "ALL")!==String(year)) return;
+
+    const perChart=result.chart_insights || {};
+
+    // Annual panel: render exactly one bulletin for every selected chip, in chip order.
+    if(scope === "all" || scope === "annual"){
+      const returned = Array.isArray(result.parameter_insights) ? result.parameter_insights : [];
+      const byLabel = new Map(returned.map(item=>[String(item.label || "").trim().toLowerCase(), item]));
+      const statsByLabel = new Map((result.statistics || []).map(item=>[
+        String(item.parameter || "").trim().toLowerCase(), item
+      ]));
+      const annualLines = selectedParameters.map(key=>{
+        const label=DS[key].label;
+        const item=byLabel.get(label.trim().toLowerCase());
+        const stat=statsByLabel.get(label.trim().toLowerCase());
+        let summary=item?.summary || "";
+        // A data-grounded fallback ensures the selected parameter never disappears.
+        if(!summary && stat){
+          const start=stat.starting_value, finish=stat.ending_value, change=stat.overall_change;
+          if(start!==undefined && finish!==undefined && change!==undefined){
+            const direction=change>0?"increased":change<0?"decreased":"remained broadly stable";
+            summary=`${direction} from ${start} to ${finish} ${stat.unit || DS[key].unit}; net change ${change>0?"+":""}${change} ${stat.unit || DS[key].unit}.`;
+          }else{
+            summary="There are not enough annual values to calculate a reliable trend.";
+          }
+        }
+        if(!summary) summary="No complete annual comparison was returned for this selected parameter.";
+        return `• **${label}**: ${summary}`;
+      });
+      const trendText=annualLines.length
+        ? annualLines.join("\n")
+        : "Select at least one parameter to see its annual trend.";
+      setInsightState(
+        "complete",
+        `Updated · ${city} · ${year === "ALL" ? "ALL YEARS" : year} · ${selectedParameters.length} PARAMETERS`,
+        renderInsightMarkdown(trendText)
+      );
+      const foot=document.getElementById("aiInsightFoot");
+      if(foot) foot.textContent=`NEMOTRON · ${selectedParameters.length} SELECTED PARAMETERS · ${city.toUpperCase()}`;
+    }
+
+    // Other graph cards are touched only by full refreshes or their own controller.
+    if(scope === "all" || scope === "temperature"){
+      const text=perChart.temperature || "No temperature-specific insight was returned.";
+      setInsightCard("aiProfileContent","aiProfileStatus","UPDATED",renderInsightMarkdown(text));
+    }
+    if(scope === "all" || scope === "precipitation"){
+      const text=perChart.precipitation || "No precipitation-specific insight was returned.";
+      setInsightCard("aiPrecipContent","aiPrecipStatus","UPDATED",renderInsightMarkdown(text));
+    }
+    if(scope === "all" || scope === "distribution"){
+      const text=perChart.distribution || "No distribution-specific insight was returned.";
+      setInsightCard("aiDistributionContent","aiDistributionStatus","UPDATED",renderInsightMarkdown(text));
+    }
+
+    // The final field brief is refreshed only when the whole dashboard context changes.
+    if(scope === "all"){
+      const overall=Array.isArray(result.overall_insights) ? result.overall_insights : [];
+      const overallEl=document.getElementById("aiOverallContent");
+      if(overallEl){
+        const labels=["TEMPERATURE","RAINFALL","HUMIDITY","SOIL HEAT","WIND","CROSS-GRAPH PATTERN"];
+        const cards=overall.slice(0,6).map((item,index)=>`
+          <article class="field-note-card">
+            <div class="field-note-card-head">
+              <span class="field-note-number">${String(index+1).padStart(2,"0")}</span>
+              <span class="field-note-label">${labels[index] || "OBSERVATION"}</span>
+            </div>
+            <p>${escapeInsightHtml(String(item).replace(/\uFFFD/g,"").trim())}</p>
+          </article>`).join("");
+        overallEl.innerHTML=cards || '<div class="ai-overall-placeholder">No field notes were returned for this selection.</div>';
+      }
+      if(overallStatus) overallStatus.textContent=`FIELD BRIEF · ${city.toUpperCase()} · ${year === "ALL" ? "2015–2025" : year}`;
+    }
+  }catch(error){
+    if(error.name==="AbortError" || sequence!==aiInsightSequence) return;
+    const message=escapeInsightHtml(error.message);
+    if(scope==="all" || scope==="annual") setInsightState("error","AI analysis unavailable",`<div class="ai-insight-empty">${message}</div>`);
+    if(scope==="all" || scope==="temperature") setInsightCard("aiProfileContent","aiProfileStatus","ERROR",`<div class="ai-insight-empty">${message}</div>`);
+    if(scope==="all" || scope==="precipitation") setInsightCard("aiPrecipContent","aiPrecipStatus","ERROR",`<div class="ai-insight-empty">${message}</div>`);
+    if(scope==="all" || scope==="distribution") setInsightCard("aiDistributionContent","aiDistributionStatus","ERROR",`<div class="ai-insight-empty">${message}</div>`);
+    if(scope==="all"){
+      if(overallStatus) overallStatus.textContent="ANALYSIS UNAVAILABLE";
+      const overallEl=document.getElementById("aiOverallContent");
+      if(overallEl) overallEl.innerHTML=`<div class="ai-overall-placeholder">${message}</div>`;
+    }
+  }
 }
 
 function selYear(){
@@ -880,14 +1602,14 @@ function renderProfile(){
   const minData = isAll ? seriesFor(byId.T2M_MIN) : seriesFor(byId.T2M_MIN, years[0]);
   const yTag = isAll ? "11-yr Mean" : years[0];
   const hot = {label:`Max Temp ${yTag}`,
-    backgroundColor:(ctx)=> (state.norm || isAll) ? "transparent" : areaFill(ctx.chart, "#ff7a18", .42, .12),
+    backgroundColor:(ctx)=> (state.norm || isAll) ? "transparent" : areaFill(ctx.chart, "#43b7e8", .42, .12),
     fill:!state.norm && !isAll,
-    data:maxData, borderColor:"#ff7a18", borderWidth:2.3, tension:.4,
+    data:maxData, borderColor:"#43b7e8", borderWidth:2.3, tension:.4,
     pointRadius:2.4, pointHoverRadius:7,
-    pointBackgroundColor:"#fff3e2", pointBorderColor:"#ff7a18", pointBorderWidth:1.5};
-  const min = {label:`Min Temp ${yTag}`, data:minData, borderColor:"#c9906a",
+    pointBackgroundColor:"#dff8ff", pointBorderColor:"#43b7e8", pointBorderWidth:1.5};
+  const min = {label:`Min Temp ${yTag}`, data:minData, borderColor:"#35c6a5",
     borderWidth:1.6, borderDash:[5,4], tension:.4, pointRadius:0, pointHoverRadius:6,
-    pointBackgroundColor:"#ffd9a8", pointBorderColor:"#c9906a", pointBorderWidth:1.4, fill:false};
+    pointBackgroundColor:"#d9fff2", pointBorderColor:"#35c6a5", pointBorderWidth:1.4, fill:false};
   profileChart.data.datasets = [hot, min];
   profileChart.options.plugins.legend = legendStyle;
   profileChart.options.scales.y.ticks.callback = v => state.norm ? v+"%" : v+"°";
@@ -1039,7 +1761,12 @@ function updateStationLabels(loc){
 }
 async function selectStation(loc){
   if (stationBusy) return;
-  if (activeStation && activeStation.key === loc.key){ updateStationLabels(loc); return; }
+  if (activeStation && activeStation.key === loc.key){
+    updateStationLabels(loc);
+    renderAll(); renderTrend();
+    scheduleTrendInsights(100);
+    return;
+  }
   const prev = activeStation;
   stationBusy = true;
   locChips.classList.add("busy");
@@ -1051,6 +1778,7 @@ async function selectStation(loc){
     activeStation = loc;
     updateStationLabels(loc);
     renderAll(); renderTrend();
+    scheduleTrendInsights();
     setLocStatus(`SYNCED · ${loc.lat.toFixed(4)}° N ${loc.lon.toFixed(4)}° E`);
   } catch(err){
     if (loc.key === "delhi"){
@@ -1058,6 +1786,7 @@ async function selectStation(loc){
       activeStation = LOCATIONS[0];
       updateStationLabels(LOCATIONS[0]);
       renderAll(); renderTrend();
+      scheduleTrendInsights();
       setLocStatus("OFFLINE · DELHI SNAPSHOT", "err");
     } else {
       if (prev) updateStationLabels(prev);
@@ -1179,6 +1908,8 @@ updateStationLabels(LOCATIONS[0]);
 function renderAll(){ kpis(); renderProfile(); renderBar(); renderDonut(); }
 renderAll();
 renderTrend();
+scheduleTrendInsights(500);
+window.addEventListener("load", () => scheduleTrendInsights(900), { once:true });
 
 /* fade out boot screen */
 addEventListener("load", ()=> setTimeout(()=>{ const b=document.getElementById("boot");
