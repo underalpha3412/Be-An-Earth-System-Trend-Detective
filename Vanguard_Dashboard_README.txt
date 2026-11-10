@@ -109,6 +109,15 @@ The dashboard should now be able to send graph data to the backend at:
 
 `http://127.0.0.1:8000/analyze-graph`
 
+The backend allows the default VS Code Live Server origins on ports `5500` and
+`5501`. If your local server uses a different port, set
+`DASHBOARD_ALLOWED_ORIGINS` in `.env` to a comma-separated list of the exact
+origins, for example:
+
+```env
+DASHBOARD_ALLOWED_ORIGINS=http://127.0.0.1:5502,http://localhost:5502
+```
+
 ## 7. Normal startup routine
 
 Every time you want to use the dashboard:

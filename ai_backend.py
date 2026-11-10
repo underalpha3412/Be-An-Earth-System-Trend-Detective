@@ -11,7 +11,7 @@ import certifi
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 load_dotenv()
 
@@ -30,7 +30,15 @@ app = FastAPI(title="Earth Trends AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Local development only; restrict before deployment.
+    allow_origins=[
+        origin.strip()
+        for origin in os.getenv(
+            "DASHBOARD_ALLOWED_ORIGINS",
+            "http://127.0.0.1:5500,http://localhost:5500,"
+            "http://127.0.0.1:5501,http://localhost:5501",
+        ).split(",")
+        if origin.strip()
+    ],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,8 +50,8 @@ class AnalysisRequest(BaseModel):
     latitude: float
     longitude: float
     period: str
-    parameters: list[dict[str, Any]] = []
-    charts: list[dict[str, Any]] = []
+    parameters: list[dict[str, Any]] = Field(default_factory=list)
+    charts: list[dict[str, Any]] = Field(default_factory=list)
     selected_year: str = "ALL"
     analysis_scope: str = "all"
 
@@ -129,7 +137,7 @@ def calculate_statistics(parameters: list[dict[str, Any]]) -> list[dict[str, Any
 
 
 def call_nemotron(prompt: str) -> str:
-    """Call NVIDIA NIM's OpenAI-compatible chat-completions endpoint."""
+    """Send a chat-completions request to NVIDIA NIM."""
     if not NVIDIA_API_KEY:
         raise HTTPException(
             status_code=500,
@@ -209,7 +217,7 @@ def call_nemotron(prompt: str) -> str:
     # thinking consumes the generation budget. Thinking is disabled above;
     # still fail clearly rather than displaying the string "None".
     if isinstance(content, list):
-        content = "\\n".join(
+        content = "\n".join(
             part.get("text", "")
             for part in content
             if isinstance(part, dict) and part.get("text")
