@@ -990,12 +990,12 @@ const DS = {};
 for (const k in RAW){ DS[k] = cleanDS(RAW[k]); DS[k].key = k; }
 // Consistent Vanguard blue/green palette for every parameter graph.
 const VANGUARD_DATA_COLORS = {
-  T2M_MAX:"#43b7e8",
-  T2M_MIN:"#8bd5ee",
-  TSOIL1:"#35c6a5",
-  QV2M:"#77d9a8",
-  PRECTOTCORR:"#5c91e6",
-  WS10M:"#a2d9c8"
+  T2M_MAX:"#FF6B6B",   // Coral red
+  T2M_MIN:"#A78BFA",   // Violet
+  TSOIL1:"#F4B942",    // Amber
+  QV2M:"#F472B6",      // Pink
+  PRECTOTCORR:"#38BDF8", // Sky blue
+  WS10M:"#A3E635"      // Lime
 };
 for (const key in VANGUARD_DATA_COLORS) {
   if (DS[key]) DS[key].color = VANGUARD_DATA_COLORS[key];
@@ -1155,7 +1155,7 @@ const tooltipStyle = {
   usePointStyle:true
 };
 const legendStyle = {position:"top", align:"end", labels:{usePointStyle:true, pointStyle:"circle",
-  boxWidth:7, boxHeight:7, padding:16, color:"#9ab0ba", font:tickFont}};
+  boxWidth:10, boxHeight:10, pointStyleWidth:10, padding:16, color:"#c5d2d9", font:tickFont}};
 
 /* ember glow pass — the halo around lines, points and bars */
 const emberGlow = {
@@ -1302,9 +1302,10 @@ function renderTrend(){
     return {label:`${p.label} · ANN (${p.unit})`, data:YEARS.map(y=>p.ann[y]), borderColor:p.color,
       backgroundColor:(ctx)=> areaFill(ctx.chart, p.color, .26, .09),
       fill:true, borderWidth:2, tension:.38,
-      pointRadius:2.8, pointHoverRadius:7,
-      pointBackgroundColor:"#fff3e2", pointBorderColor:p.color, pointBorderWidth:1.6,
-      pointHoverBackgroundColor:"#fff", pointHoverBorderColor:p.color, pointHoverBorderWidth:2.4};
+      pointRadius:3.2, pointHoverRadius:7,
+      pointBackgroundColor:p.color, pointBorderColor:p.color, pointBorderWidth:1.6,
+      pointHoverBackgroundColor:p.color, pointHoverBorderColor:"#ffffff", pointHoverBorderWidth:2.4,
+      pointStyle:"circle"};
   });
   trendChart.data.datasets = ds;
   trendChart.update();
