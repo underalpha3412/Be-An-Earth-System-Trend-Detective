@@ -1066,7 +1066,7 @@ setInterval(()=>{ const d=new Date();
 const ySel = document.getElementById("yearSelect");
 ySel.innerHTML = `<option value="ALL">ALL YEARS · 2015–2025 MEAN</option>` +
   YEARS.map(y=>`<option value="${y}">${y}</option>`).join("");
-ySel.addEventListener("change", ()=>{ state.year = ySel.value; renderAll(); scheduleTrendInsights(); });
+ySel.addEventListener("change", ()=>{ state.year = ySel.value; renderAll(); });
 
 /* trend parameter chips */
 const chipsBox = document.getElementById("paramChips");
@@ -1732,6 +1732,10 @@ function applyStation(rawMap){
     DS[key].key = key;
   }
   syncRegistry();
+  // Keep the same parameter-to-color mapping after every city is loaded.
+  for (const key in VANGUARD_DATA_COLORS) {
+    if (DS[key]) DS[key].color = VANGUARD_DATA_COLORS[key];
+  }
   noteFlagged();
 }
 function updateStationLabels(loc){
