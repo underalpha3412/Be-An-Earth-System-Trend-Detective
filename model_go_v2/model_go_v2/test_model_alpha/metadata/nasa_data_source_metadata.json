@@ -1,0 +1,486 @@
+{
+  "api_config": {
+    "base_url_daily": "https://power.larc.nasa.gov/api/temporal/daily/point",
+    "metadata_url": "https://power.larc.nasa.gov/api/system/manager/parameters",
+    "community": "AG",
+    "temporal_resolution": "daily",
+    "time_standard": "LST",
+    "format": "JSON",
+    "timeout_seconds": 60,
+    "max_retries": 4,
+    "retry_backoff_seconds": 3.0,
+    "chunk_years": 5
+  },
+  "available_parameters": [
+    "T2M",
+    "T2M_MAX",
+    "T2M_MIN",
+    "RH2M",
+    "PRECTOTCORR",
+    "WS10M",
+    "WD10M",
+    "ALLSKY_SFC_SW_DWN",
+    "PS"
+  ],
+  "unavailable_parameters": {},
+  "parameter_metadata": {
+    "T2M": {
+      "units": "C",
+      "longname": "Temperature at 2 Meters"
+    },
+    "T2M_MAX": {
+      "units": "C",
+      "longname": "Temperature at 2 Meters Maximum"
+    },
+    "T2M_MIN": {
+      "units": "C",
+      "longname": "Temperature at 2 Meters Minimum"
+    },
+    "RH2M": {
+      "units": "%",
+      "longname": "Relative Humidity at 2 Meters"
+    },
+    "PRECTOTCORR": {
+      "units": "mm/day",
+      "longname": "Precipitation Corrected"
+    },
+    "WS10M": {
+      "units": "m/s",
+      "longname": "Wind Speed at 10 Meters"
+    },
+    "WD10M": {
+      "units": "Degrees",
+      "longname": "Wind Direction at 10 Meters"
+    },
+    "ALLSKY_SFC_SW_DWN": {
+      "units": "MJ/m^2/day",
+      "longname": "All Sky Surface Shortwave Downward Irradiance"
+    },
+    "PS": {
+      "units": "kPa",
+      "longname": "Surface Pressure"
+    }
+  },
+  "delhi_source_metadata": {
+    "location_tag": "delhi",
+    "region": "Delhi",
+    "point_id": "DEL_CENTER",
+    "latitude_requested": 28.6139,
+    "longitude_requested": 77.209,
+    "grid_geometry": [
+      77.209,
+      28.614,
+      206.37
+    ],
+    "sources": [
+      "MERRA2",
+      "SYN1DEG",
+      "POWER"
+    ],
+    "fill_value_sentinel": -999.0,
+    "sentinel_counts_replaced_with_nan": {
+      "T2M": 0,
+      "T2M_MAX": 0,
+      "T2M_MIN": 0,
+      "RH2M": 0,
+      "PRECTOTCORR": 0,
+      "WS10M": 0,
+      "WD10M": 0,
+      "ALLSKY_SFC_SW_DWN": 0,
+      "PS": 0
+    },
+    "units": {
+      "T2M": {
+        "units": "C",
+        "longname": "Temperature at 2 Meters"
+      },
+      "T2M_MAX": {
+        "units": "C",
+        "longname": "Temperature at 2 Meters Maximum"
+      },
+      "T2M_MIN": {
+        "units": "C",
+        "longname": "Temperature at 2 Meters Minimum"
+      },
+      "RH2M": {
+        "units": "%",
+        "longname": "Relative Humidity at 2 Meters"
+      },
+      "PRECTOTCORR": {
+        "units": "mm/day",
+        "longname": "Precipitation Corrected"
+      },
+      "WS10M": {
+        "units": "m/s",
+        "longname": "Wind Speed at 10 Meters"
+      },
+      "WD10M": {
+        "units": "Degrees",
+        "longname": "Wind Direction at 10 Meters"
+      },
+      "ALLSKY_SFC_SW_DWN": {
+        "units": "MJ/m^2/day",
+        "longname": "All Sky Surface Shortwave Downward Irradiance"
+      },
+      "PS": {
+        "units": "kPa",
+        "longname": "Surface Pressure"
+      }
+    },
+    "rows": 5479,
+    "date_min": "2011-01-01",
+    "date_max": "2025-12-31"
+  },
+  "haryana_source_metadata": [
+    {
+      "location_tag": "har_ambala",
+      "region": "Haryana",
+      "point_id": "HAR_AMBALA",
+      "latitude_requested": 30.3782,
+      "longitude_requested": 76.7767,
+      "grid_geometry": [
+        76.777,
+        30.378,
+        423.74
+      ],
+      "sources": [
+        "MERRA2",
+        "SYN1DEG",
+        "POWER"
+      ],
+      "fill_value_sentinel": -999.0,
+      "sentinel_counts_replaced_with_nan": {
+        "T2M": 0,
+        "T2M_MAX": 0,
+        "T2M_MIN": 0,
+        "RH2M": 0,
+        "PRECTOTCORR": 0,
+        "WS10M": 0,
+        "WD10M": 0,
+        "ALLSKY_SFC_SW_DWN": 0,
+        "PS": 0
+      },
+      "units": {
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "T2M_MAX": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Maximum"
+        },
+        "T2M_MIN": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Minimum"
+        },
+        "RH2M": {
+          "units": "%",
+          "longname": "Relative Humidity at 2 Meters"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        },
+        "WD10M": {
+          "units": "Degrees",
+          "longname": "Wind Direction at 10 Meters"
+        },
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "MJ/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PS": {
+          "units": "kPa",
+          "longname": "Surface Pressure"
+        }
+      },
+      "rows": 5479,
+      "date_min": "2011-01-01",
+      "date_max": "2025-12-31"
+    },
+    {
+      "location_tag": "har_karnal",
+      "region": "Haryana",
+      "point_id": "HAR_KARNAL",
+      "latitude_requested": 29.6857,
+      "longitude_requested": 76.9905,
+      "grid_geometry": [
+        76.99,
+        29.686,
+        237.6
+      ],
+      "sources": [
+        "MERRA2",
+        "SYN1DEG",
+        "POWER"
+      ],
+      "fill_value_sentinel": -999.0,
+      "sentinel_counts_replaced_with_nan": {
+        "T2M": 0,
+        "T2M_MAX": 0,
+        "T2M_MIN": 0,
+        "RH2M": 0,
+        "PRECTOTCORR": 0,
+        "WS10M": 0,
+        "WD10M": 0,
+        "ALLSKY_SFC_SW_DWN": 0,
+        "PS": 0
+      },
+      "units": {
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "T2M_MAX": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Maximum"
+        },
+        "T2M_MIN": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Minimum"
+        },
+        "RH2M": {
+          "units": "%",
+          "longname": "Relative Humidity at 2 Meters"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        },
+        "WD10M": {
+          "units": "Degrees",
+          "longname": "Wind Direction at 10 Meters"
+        },
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "MJ/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PS": {
+          "units": "kPa",
+          "longname": "Surface Pressure"
+        }
+      },
+      "rows": 5479,
+      "date_min": "2011-01-01",
+      "date_max": "2025-12-31"
+    },
+    {
+      "location_tag": "har_hisar",
+      "region": "Haryana",
+      "point_id": "HAR_HISAR",
+      "latitude_requested": 29.1492,
+      "longitude_requested": 75.7217,
+      "grid_geometry": [
+        75.722,
+        29.149,
+        217.18
+      ],
+      "sources": [
+        "MERRA2",
+        "SYN1DEG",
+        "POWER"
+      ],
+      "fill_value_sentinel": -999.0,
+      "sentinel_counts_replaced_with_nan": {
+        "T2M": 0,
+        "T2M_MAX": 0,
+        "T2M_MIN": 0,
+        "RH2M": 0,
+        "PRECTOTCORR": 0,
+        "WS10M": 0,
+        "WD10M": 0,
+        "ALLSKY_SFC_SW_DWN": 0,
+        "PS": 0
+      },
+      "units": {
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "T2M_MAX": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Maximum"
+        },
+        "T2M_MIN": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Minimum"
+        },
+        "RH2M": {
+          "units": "%",
+          "longname": "Relative Humidity at 2 Meters"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        },
+        "WD10M": {
+          "units": "Degrees",
+          "longname": "Wind Direction at 10 Meters"
+        },
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "MJ/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PS": {
+          "units": "kPa",
+          "longname": "Surface Pressure"
+        }
+      },
+      "rows": 5479,
+      "date_min": "2011-01-01",
+      "date_max": "2025-12-31"
+    },
+    {
+      "location_tag": "har_sirsa",
+      "region": "Haryana",
+      "point_id": "HAR_SIRSA",
+      "latitude_requested": 29.5321,
+      "longitude_requested": 75.0318,
+      "grid_geometry": [
+        75.032,
+        29.532,
+        201.22
+      ],
+      "sources": [
+        "MERRA2",
+        "SYN1DEG",
+        "POWER"
+      ],
+      "fill_value_sentinel": -999.0,
+      "sentinel_counts_replaced_with_nan": {
+        "T2M": 0,
+        "T2M_MAX": 0,
+        "T2M_MIN": 0,
+        "RH2M": 0,
+        "PRECTOTCORR": 0,
+        "WS10M": 0,
+        "WD10M": 0,
+        "ALLSKY_SFC_SW_DWN": 0,
+        "PS": 0
+      },
+      "units": {
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "T2M_MAX": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Maximum"
+        },
+        "T2M_MIN": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Minimum"
+        },
+        "RH2M": {
+          "units": "%",
+          "longname": "Relative Humidity at 2 Meters"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        },
+        "WD10M": {
+          "units": "Degrees",
+          "longname": "Wind Direction at 10 Meters"
+        },
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "MJ/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PS": {
+          "units": "kPa",
+          "longname": "Surface Pressure"
+        }
+      },
+      "rows": 5479,
+      "date_min": "2011-01-01",
+      "date_max": "2025-12-31"
+    },
+    {
+      "location_tag": "har_narnaul",
+      "region": "Haryana",
+      "point_id": "HAR_NARNAUL",
+      "latitude_requested": 28.0444,
+      "longitude_requested": 76.1083,
+      "grid_geometry": [
+        76.108,
+        28.044,
+        321.43
+      ],
+      "sources": [
+        "MERRA2",
+        "SYN1DEG",
+        "POWER"
+      ],
+      "fill_value_sentinel": -999.0,
+      "sentinel_counts_replaced_with_nan": {
+        "T2M": 0,
+        "T2M_MAX": 0,
+        "T2M_MIN": 0,
+        "RH2M": 0,
+        "PRECTOTCORR": 0,
+        "WS10M": 0,
+        "WD10M": 0,
+        "ALLSKY_SFC_SW_DWN": 0,
+        "PS": 0
+      },
+      "units": {
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "T2M_MAX": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Maximum"
+        },
+        "T2M_MIN": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters Minimum"
+        },
+        "RH2M": {
+          "units": "%",
+          "longname": "Relative Humidity at 2 Meters"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        },
+        "WD10M": {
+          "units": "Degrees",
+          "longname": "Wind Direction at 10 Meters"
+        },
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "MJ/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PS": {
+          "units": "kPa",
+          "longname": "Surface Pressure"
+        }
+      },
+      "rows": 5479,
+      "date_min": "2011-01-01",
+      "date_max": "2025-12-31"
+    }
+  ]
+}

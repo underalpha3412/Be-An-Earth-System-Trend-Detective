@@ -1,6 +1,7 @@
 import json
 import re
 import os
+import sys
 import ssl
 import traceback
 import urllib.error
@@ -14,6 +15,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 load_dotenv()
+
+# ---------------------------------------------------------------------------
+# Make model_go importable from the nested vendor directory
+# ---------------------------------------------------------------------------
+_MODEL_GO_DIR = os.path.join(
+    os.path.dirname(__file__),
+    "model_go_v2", "model_go_v2"
+)
+if _MODEL_GO_DIR not in sys.path:
+    sys.path.insert(0, _MODEL_GO_DIR)
+
+try:
+    from model_go.sdk.client import Forecaster as _Forecaster
+    _forecaster_instance = _Forecaster()      # in-process, zero HTTP overhead
+    _MODEL_GO_AVAILABLE = True
+except Exception as _model_go_err:
+    _MODEL_GO_AVAILABLE = False
+    _forecaster_instance = None
+    print(f"[model_go] WARNING: Could not load forecaster — forecasts disabled. Error: {_model_go_err}")
 
 # Create an NVIDIA API key at https://build.nvidia.com/ and put it in .env.
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
@@ -241,6 +261,87 @@ def call_nemotron(prompt: str) -> str:
     return content.strip()
 
 
+# ---------------------------------------------------------------------------
+# model_go forecast helper
+# ---------------------------------------------------------------------------
+def run_model_go_forecast(lat: float, lon: float, city: str) -> dict[str, Any]:
+    """
+    Call the model_go Forecaster and return a compact forecast dict suitable
+    for embedding in both the Nemotron prompt and the HTTP response.
+
+    Returns:
+        {
+          "available": bool,
+          "horizons": {
+            "+24h":  {"temperature_c": ..., "precipitation_mm": ..., "humidity_pct": ...,
+                      "wind_ms": ..., "rain_probability": ..., "valid_time_ist": ...},
+            "+48h":  {...},
+            "+72h":  {...},
+            "+7d":   {...},
+            "+30d":  {...},
+          },
+          "metadata": {...},
+          "error": "..." | None
+        }
+    """
+    if not _MODEL_GO_AVAILABLE or _forecaster_instance is None:
+        return {"available": False, "horizons": {}, "metadata": {}, "error": "model_go not loaded"}
+
+    try:
+        raw: dict = _forecaster_instance.predict_point(
+            lat=lat, lon=lon, station_name=city
+        )
+        horizons_raw: dict = raw.get("horizons", {})
+        compact: dict[str, Any] = {}
+        for key, h in horizons_raw.items():
+            if isinstance(h, dict):
+                compact[key] = {
+                    "temperature_c":        round(h.get("temperature_c", 0), 2),
+                    "precipitation_mm":     round(h.get("precipitation_expected_mm", 0), 2),
+                    "humidity_pct":         round(h.get("relative_humidity_pct", 0), 1),
+                    "wind_ms":              round(h.get("wind_speed_ms", 0), 2),
+                    "rain_probability":     round(h.get("rain_probability", 0), 3),
+                    "valid_time_ist":       h.get("valid_time_ist", ""),
+                    "dominant_engine":      h.get("dominant_engine", ""),
+                    "temp_uncertainty_90":  h.get("temp_uncertainty_90pct", [None, None]),
+                }
+        meta = raw.get("metadata", {})
+        return {
+            "available": True,
+            "horizons": compact,
+            "metadata": {
+                "model_version":    meta.get("model_version", "2.0.0"),
+                "adapter_status":   meta.get("adapter_status", "unknown"),
+                "degraded_mode":    meta.get("degraded_mode", False),
+                "active_engines":   meta.get("active_engines", []),
+                "inference_ms":     meta.get("inference_latency_ms", 0),
+            },
+            "error": None,
+        }
+    except Exception as exc:
+        traceback.print_exc()
+        return {"available": False, "horizons": {}, "metadata": {}, "error": str(exc)}
+
+
+def _forecast_summary_for_prompt(forecast: dict[str, Any]) -> str:
+    """Produce a compact text block from forecast data for the Nemotron prompt."""
+    if not forecast.get("available"):
+        return "Model-Go forecast unavailable.\n"
+    lines = ["MODEL-GO SHORT-TO-MEDIUM RANGE FORECAST (live, in-process):"]
+    for label, h in forecast.get("horizons", {}).items():
+        ci = h.get("temp_uncertainty_90", [None, None])
+        ci_str = f"[{ci[0]:.1f}–{ci[1]:.1f} °C 90% CI]" if ci and ci[0] is not None else ""
+        lines.append(
+            f"  {label}: Temp {h['temperature_c']} °C {ci_str}, "
+            f"Precip {h['precipitation_mm']} mm, RH {h['humidity_pct']}%, "
+            f"Wind {h['wind_ms']} m/s, Rain-prob {h['rain_probability']:.0%} "
+            f"(valid {h['valid_time_ist']})"
+        )
+    meta = forecast.get("metadata", {})
+    lines.append(f"  Engines: {', '.join(meta.get('active_engines', []))}")
+    lines.append(f"  Adapter: {meta.get('adapter_status', 'unknown')}")
+    return "\n".join(lines)
+
 
 @app.get("/")
 def home():
@@ -354,6 +455,14 @@ def analyze_graph(request: AnalysisRequest):
         statistics = calculate_statistics(request.parameters) if request.parameters else []
         charts = request.charts or []
 
+        # ── model_go forecast (always run; non-blocking on failure) ──────────
+        model_go_forecast = run_model_go_forecast(
+            lat=request.latitude,
+            lon=request.longitude,
+            city=request.city,
+        )
+        forecast_text = _forecast_summary_for_prompt(model_go_forecast)
+
         if not charts and not statistics:
             raise HTTPException(status_code=400, detail="No graph data was supplied for analysis.")
 
@@ -369,6 +478,8 @@ Period: {request.period}
 ANNUAL STATISTICS FOR THE SELECTED GRAPH PARAMETERS:
 {json.dumps(statistics, ensure_ascii=False, indent=2)}
 
+{forecast_text}
+
 Return ONLY valid JSON:
 {{
   "parameter_insights": [
@@ -381,6 +492,7 @@ Rules:
 - Copy each parameter label exactly.
 - Describe its observed direction and notable variation using only its supplied values.
 - Mention starting and ending values or net change when useful.
+- If forecast data is available, briefly mention the short-range outlook for relevant parameters.
 - Keep each summary to one short sentence, ideally 18–28 words.
 - Begin every summary with a relevant actual Unicode emoji.
 - Do not discuss parameters that are not in the supplied statistics.
@@ -403,8 +515,10 @@ City: {request.city}
 Selected year: {request.selected_year}
 Analyse ONLY this graph: {json.dumps(charts, ensure_ascii=False, indent=2)}
 
+{forecast_text}
+
 Return ONLY valid JSON in this exact format:
-{{"insight": "two concise bullet lines, each based on the supplied graph"}}
+{{"insight": "two concise bullet lines, each based on the supplied graph and forecast if relevant"}}
 
 Do not discuss other graphs. Use only supplied data. Keep it compact and avoid unproven causal claims.
 """
@@ -433,23 +547,25 @@ ANNUAL PARAMETER STATISTICS:
 GRAPH DATA:
 {json.dumps(charts, ensure_ascii=False, indent=2)}
 
+{forecast_text}
+
 Return ONLY valid JSON:
 {{
   "chart_insights": {{
-    "temperature": "1 or 2 short bullet lines",
-    "precipitation": "1 or 2 short bullet lines",
+    "temperature": "1 or 2 short bullet lines (mention forecast outlook if available)",
+    "precipitation": "1 or 2 short bullet lines (mention forecast outlook if available)",
     "distribution": "1 or 2 short bullet lines"
   }},
   "parameter_insights": [
     {{"label": "exact selected parameter label", "summary": "one concise observation"}}
   ],
   "overall_insights": [
-    "concise temperature observation",
-    "concise rainfall observation",
+    "concise temperature observation (include +24h forecast if available)",
+    "concise rainfall observation (include +24h forecast if available)",
     "concise humidity observation",
     "concise soil-temperature observation",
     "concise wind observation",
-    "concise cross-graph takeaway"
+    "concise cross-graph takeaway or model forecast summary"
   ]
 }}
 
@@ -507,6 +623,7 @@ Rules:
                 "analysis_scope": scope,
                 "parameter_insights": parameter_insights,
                 "statistics": statistics,
+                "model_go": model_go_forecast,
             }
 
         if scope in {"temperature", "precipitation", "distribution"}:
@@ -515,6 +632,7 @@ Rules:
                 "selected_year": request.selected_year,
                 "analysis_scope": scope,
                 "insight": str(parsed.get("insight", "")).strip(),
+                "model_go": model_go_forecast,
             }
 
         chart_insights = parsed.get("chart_insights") or {}
@@ -539,6 +657,7 @@ Rules:
             "parameter_insights": parameter_insights,
             "overall_insights": overall,
             "statistics": statistics,
+            "model_go": model_go_forecast,
         }
 
     except HTTPException:

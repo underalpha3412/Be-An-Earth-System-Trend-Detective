@@ -1,0 +1,913 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "model_go | Production Meteorological Forecasting Engine",
+    "description": "Unified headless meteorological API merging Model Alpha (GBDT), Hybrid Physics-ML, and IMD 4D-Var Assimilation.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/v1/forecast/point": {
+      "post": {
+        "tags": [
+          "Meteorological Forecasting"
+        ],
+        "summary": "Forecast Point",
+        "description": "Generate unified multi-horizon point forecast (24h, 48h, 72h, 7d, 30d).\nExecutes Hierarchical MoE routing and boundary nudging.",
+        "operationId": "forecast_point_v1_forecast_point_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastPointRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/adapt": {
+      "post": {
+        "tags": [
+          "Meteorological Forecasting"
+        ],
+        "summary": "Adapt Location",
+        "description": "On-Demand Regional Specialization Endpoint.\nSynchronously fits and saves a local residual bias-correction head (< 50 KB)\nfor the specified coordinate, pre-warming it for sub-18ms future inference.",
+        "operationId": "adapt_location_v1_adapt_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdaptRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdaptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/forecast/regional": {
+      "post": {
+        "tags": [
+          "Meteorological Forecasting"
+        ],
+        "summary": "Forecast Regional",
+        "description": "Generate coarse regional multi-horizon grid forecast for a spatial bounding box.\nEvaluates spatio-temporal dynamics using the distilled hybrid physics student engine.",
+        "operationId": "forecast_regional_v1_forecast_regional_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRegionalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/alerts/active": {
+      "get": {
+        "tags": [
+          "Meteorological Forecasting"
+        ],
+        "summary": "Get Active Alerts",
+        "description": "Retrieve all current active River Yamuna hydrological and IMD statutory weather alerts.",
+        "operationId": "get_active_alerts_v1_alerts_active_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UnifiedAlert"
+                  },
+                  "type": "array",
+                  "title": "Response Get Active Alerts V1 Alerts Active Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "Meteorological Forecasting"
+        ],
+        "summary": "Get System Health",
+        "description": "System diagnostic and live upstream connector health monitor.\nReports operational status for NASA POWER, GPM IMERG, GEOS-FP, SMAP, and IMD bridges.",
+        "operationId": "get_system_health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemHealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Root"
+        ],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdaptRequest": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat",
+            "description": "Latitude in decimal degrees"
+          },
+          "lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lon",
+            "description": "Longitude in decimal degrees"
+          },
+          "lookback_years": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Lookback Years",
+            "description": "Historical training window in years",
+            "default": 3
+          },
+          "station_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Station Name",
+            "description": "Optional city or station name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "title": "AdaptRequest"
+      },
+      "AdaptResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "SUCCESS"
+          },
+          "grid_key": {
+            "type": "string",
+            "title": "Grid Key"
+          },
+          "station_name": {
+            "type": "string",
+            "title": "Station Name"
+          },
+          "adapter_status": {
+            "type": "string",
+            "title": "Adapter Status"
+          },
+          "training_time_sec": {
+            "type": "number",
+            "title": "Training Time Sec"
+          },
+          "sample_count": {
+            "type": "integer",
+            "title": "Sample Count"
+          },
+          "train_mae_c": {
+            "type": "number",
+            "title": "Train Mae C"
+          },
+          "val_mae_c": {
+            "type": "number",
+            "title": "Val Mae C"
+          },
+          "conformal_quantile_90_c": {
+            "type": "number",
+            "title": "Conformal Quantile 90 C"
+          },
+          "adapter_size_bytes": {
+            "type": "integer",
+            "title": "Adapter Size Bytes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "grid_key",
+          "station_name",
+          "adapter_status",
+          "training_time_sec",
+          "sample_count",
+          "train_mae_c",
+          "val_mae_c",
+          "conformal_quantile_90_c",
+          "adapter_size_bytes"
+        ],
+        "title": "AdaptResponse"
+      },
+      "AlertLevel": {
+        "type": "string",
+        "enum": [
+          "GREEN",
+          "YELLOW",
+          "ORANGE",
+          "EXTREME_RED_ALERT"
+        ],
+        "title": "AlertLevel"
+      },
+      "ConnectorHealth": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          },
+          "last_sync_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync Utc"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "status",
+          "latency_ms",
+          "notes"
+        ],
+        "title": "ConnectorHealth"
+      },
+      "DominantEngine": {
+        "type": "string",
+        "enum": [
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD",
+          "IMD_4DVAR_NUDGED"
+        ],
+        "title": "DominantEngine"
+      },
+      "ForecastMetadata": {
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "default": "2.0.0-headless"
+          },
+          "profile": {
+            "type": "string",
+            "title": "Profile",
+            "default": "server"
+          },
+          "degraded_mode": {
+            "type": "boolean",
+            "title": "Degraded Mode",
+            "description": "True if operating in circuit-breaker fallback mode",
+            "default": false
+          },
+          "adapter_status": {
+            "type": "string",
+            "title": "Adapter Status",
+            "description": "Adaptation tier: 'specialized', 'warming_up', or 'zero_shot'",
+            "default": "specialized"
+          },
+          "conformal_coverage_guarantee": {
+            "type": "string",
+            "title": "Conformal Coverage Guarantee",
+            "description": "Conformal coverage guarantee",
+            "default": "90% (Split Conformal)"
+          },
+          "persistence_blend_weight": {
+            "type": "number",
+            "title": "Persistence Blend Weight",
+            "description": "Dynamic weight assigned to persistence blending",
+            "default": 0.0
+          },
+          "t0_timestamp_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "T0 Timestamp Utc"
+          },
+          "t0_timestamp_ist": {
+            "type": "string",
+            "title": "T0 Timestamp Ist",
+            "description": "ISO-8601 Indian Standard Time string",
+            "default": ""
+          },
+          "t0_assimilation_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "T0 Assimilation Sources",
+            "description": "Active data feeds assimilated at t0"
+          },
+          "active_engines": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Active Engines",
+            "description": "Dispatched forecasting expert engines"
+          },
+          "inference_latency_ms": {
+            "type": "number",
+            "title": "Inference Latency Ms",
+            "description": "End-to-end inference execution time in milliseconds"
+          },
+          "spending_incurred": {
+            "type": "string",
+            "title": "Spending Incurred",
+            "default": "\u20b90.00"
+          }
+        },
+        "type": "object",
+        "required": [
+          "t0_assimilation_sources",
+          "active_engines",
+          "inference_latency_ms"
+        ],
+        "title": "ForecastMetadata"
+      },
+      "ForecastPointRequest": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "description": "Latitude in decimal degrees",
+            "default": 28.6139
+          },
+          "longitude": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "description": "Longitude in decimal degrees",
+            "default": 77.209
+          },
+          "station_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Station Name",
+            "description": "Optional station name",
+            "default": "Delhi (Safdarjung)"
+          },
+          "horizons_hours": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Horizons Hours",
+            "description": "Forecast horizons in hours",
+            "default": [
+              24,
+              48,
+              72,
+              168,
+              720
+            ]
+          },
+          "include_synoptics": {
+            "type": "boolean",
+            "title": "Include Synoptics",
+            "description": "Whether to include synoptic fluid vectors",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "ForecastPointRequest"
+      },
+      "ForecastRegionalRequest": {
+        "properties": {
+          "min_lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Min Lat",
+            "default": 27.5
+          },
+          "max_lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Max Lat",
+            "default": 30.0
+          },
+          "min_lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Min Lon",
+            "default": 76.0
+          },
+          "max_lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Max Lon",
+            "default": 78.5
+          },
+          "resolution_deg": {
+            "type": "number",
+            "maximum": 2.5,
+            "minimum": 0.05,
+            "title": "Resolution Deg",
+            "default": 0.25
+          },
+          "horizons_hours": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Horizons Hours",
+            "default": [
+              24,
+              48,
+              72
+            ]
+          }
+        },
+        "type": "object",
+        "title": "ForecastRegionalRequest"
+      },
+      "ForecastResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "SUCCESS"
+          },
+          "target_location": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Target Location",
+            "description": "Location metadata (lat, lon, station)"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/ForecastMetadata"
+          },
+          "horizons": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HorizonForecast"
+            },
+            "type": "object",
+            "title": "Horizons"
+          },
+          "synoptic_context": {
+            "$ref": "#/components/schemas/SynopticContext"
+          },
+          "alerts": {
+            "items": {
+              "$ref": "#/components/schemas/UnifiedAlert"
+            },
+            "type": "array",
+            "title": "Alerts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_location",
+          "metadata",
+          "horizons",
+          "synoptic_context",
+          "alerts"
+        ],
+        "title": "ForecastResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HorizonForecast": {
+        "properties": {
+          "lead_time_hours": {
+            "type": "integer",
+            "title": "Lead Time Hours",
+            "description": "Lead time from t0 in hours"
+          },
+          "horizon_label": {
+            "type": "string",
+            "title": "Horizon Label",
+            "description": "Horizon key e.g. +24h, +48h, +7d"
+          },
+          "valid_time_utc": {
+            "type": "string",
+            "title": "Valid Time Utc",
+            "description": "Target validity ISO-8601 UTC timestamp",
+            "default": ""
+          },
+          "valid_time_ist": {
+            "type": "string",
+            "title": "Valid Time Ist",
+            "description": "Target validity ISO-8601 IST timestamp",
+            "default": ""
+          },
+          "temperature_c": {
+            "type": "number",
+            "title": "Temperature C",
+            "description": "Predicted 2-meter air temperature (\u00b0C)"
+          },
+          "temp_uncertainty_90pct": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Temp Uncertainty 90Pct",
+            "description": "Calibrated 90% confidence interval [lower, upper] (\u00b0C)"
+          },
+          "msl_pressure_hpa": {
+            "type": "number",
+            "title": "Msl Pressure Hpa",
+            "description": "Mean sea-level pressure (hPa)"
+          },
+          "wind_speed_ms": {
+            "type": "number",
+            "title": "Wind Speed Ms",
+            "description": "10-meter wind speed (m/s)"
+          },
+          "relative_humidity_pct": {
+            "type": "number",
+            "title": "Relative Humidity Pct",
+            "description": "2-meter relative humidity (%)"
+          },
+          "precipitation_expected_mm": {
+            "type": "number",
+            "title": "Precipitation Expected Mm",
+            "description": "Expected rainfall accumulation (mm)"
+          },
+          "rain_probability": {
+            "type": "number",
+            "title": "Rain Probability",
+            "description": "Two-stage hurdle probability of rain [0.0 - 1.0]"
+          },
+          "rain_hurdle_classification": {
+            "type": "string",
+            "title": "Rain Hurdle Classification",
+            "description": "Hurdle rainfall classification"
+          },
+          "dominant_engine": {
+            "$ref": "#/components/schemas/DominantEngine",
+            "description": "Primary model engine routed for this horizon"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lead_time_hours",
+          "horizon_label",
+          "temperature_c",
+          "temp_uncertainty_90pct",
+          "msl_pressure_hpa",
+          "wind_speed_ms",
+          "relative_humidity_pct",
+          "precipitation_expected_mm",
+          "rain_probability",
+          "rain_hurdle_classification",
+          "dominant_engine"
+        ],
+        "title": "HorizonForecast"
+      },
+      "SynopticContext": {
+        "properties": {
+          "active_drivers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Active Drivers",
+            "description": "Active meteorological drivers (e.g. Western Disturbance, Monsoon Trough)"
+          },
+          "vorticity_advection_vector": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Vorticity Advection Vector",
+            "description": "Upper-air vorticity transport vector (u, v)",
+            "default": [
+              0.0,
+              0.0
+            ]
+          },
+          "geostrophic_adjustment_status": {
+            "type": "string",
+            "title": "Geostrophic Adjustment Status",
+            "description": "Geostrophic wind-pressure balance state",
+            "default": "BALANCED"
+          },
+          "meridional_thermal_gradient_c_per_deg": {
+            "type": "number",
+            "title": "Meridional Thermal Gradient C Per Deg",
+            "description": "North-south temperature gradient",
+            "default": -0.04
+          }
+        },
+        "type": "object",
+        "title": "SynopticContext"
+      },
+      "SystemHealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "service": {
+            "type": "string",
+            "title": "Service",
+            "default": "model_go"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": "2.0.0"
+          },
+          "profile": {
+            "type": "string",
+            "title": "Profile"
+          },
+          "timestamp_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp Utc"
+          },
+          "connectors": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ConnectorHealth"
+            },
+            "type": "object",
+            "title": "Connectors"
+          },
+          "active_alerts_count": {
+            "type": "integer",
+            "title": "Active Alerts Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "profile",
+          "connectors",
+          "active_alerts_count"
+        ],
+        "title": "SystemHealthResponse"
+      },
+      "UnifiedAlert": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "description": "Alert category: 'YAMUNA_HYDROLOGY', 'GLOBAL_HYDROLOGY', or 'IMD_STATUTORY'"
+          },
+          "level": {
+            "$ref": "#/components/schemas/AlertLevel",
+            "description": "Standardized alert severity level"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "Short alert title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "description": "Detailed meteorological/hydrological advisory"
+          },
+          "gauge_level_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gauge Level M",
+            "description": "Current / projected River Yamuna gauge level at Old Railway Bridge"
+          },
+          "danger_mark_m": {
+            "type": "number",
+            "title": "Danger Mark M",
+            "description": "Official CWC danger mark level",
+            "default": 205.33
+          },
+          "runoff_risk_index": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runoff Risk Index",
+            "description": "0-100 Flash-Flood Risk Index for global coordinates"
+          },
+          "issued_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Issued At Utc"
+          },
+          "issued_at_ist": {
+            "type": "string",
+            "title": "Issued At Ist",
+            "description": "IST issue timestamp string",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "level",
+          "title",
+          "description"
+        ],
+        "title": "UnifiedAlert"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

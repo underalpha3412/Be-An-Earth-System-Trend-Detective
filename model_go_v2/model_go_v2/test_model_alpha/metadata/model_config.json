@@ -1,0 +1,67 @@
+{
+  "project_name": "Weather Trend Detective",
+  "model_version": "1.0.0",
+  "created_utc": "2026-11-13T09:40:14.798683+00:00",
+  "random_seed": 42,
+  "split_dates": {
+    "train_start": "2011-01-01",
+    "train_end": "2020-12-31",
+    "val_start": "2021-01-01",
+    "val_end": "2022-12-31",
+    "test_start": "2023-01-01",
+    "test_end": "2025-12-31"
+  },
+  "training_region": {
+    "region_name": "Delhi",
+    "country": "India",
+    "climate_zone": "Semi-arid / Humid subtropical (BSh/Cwa)",
+    "points": [
+      {
+        "point_id": "DEL_CENTER",
+        "name": "New Delhi",
+        "latitude": 28.6139,
+        "longitude": 77.209
+      }
+    ]
+  },
+  "evaluation_regions": {
+    "Haryana": {
+      "region_name": "Haryana",
+      "country": "India",
+      "climate_zone": "Semi-arid to Sub-humid Indo-Gangetic Plain",
+      "aggregation_strategy": "multi_point_panel_and_spatial_mean",
+      "points": [
+        {
+          "point_id": "HAR_AMBALA",
+          "name": "Ambala (North-East)",
+          "latitude": 30.3782,
+          "longitude": 76.7767
+        },
+        {
+          "point_id": "HAR_KARNAL",
+          "name": "Karnal (East-Central)",
+          "latitude": 29.6857,
+          "longitude": 76.9905
+        },
+        {
+          "point_id": "HAR_HISAR",
+          "name": "Hisar (West-Central)",
+          "latitude": 29.1492,
+          "longitude": 75.7217
+        },
+        {
+          "point_id": "HAR_SIRSA",
+          "name": "Sirsa (Far West)",
+          "latitude": 29.5321,
+          "longitude": 75.0318
+        },
+        {
+          "point_id": "HAR_NARNAUL",
+          "name": "Narnaul (South-West)",
+          "latitude": 28.0444,
+          "longitude": 76.1083
+        }
+      ]
+    }
+  }
+}

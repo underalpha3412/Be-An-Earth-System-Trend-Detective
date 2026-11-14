@@ -1,0 +1,1226 @@
+[
+  {
+    "city": "Las Vegas",
+    "lat": 36.1699,
+    "lon": -115.1398,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 36.1699,
+        "longitude": -115.1398,
+        "station_name": "Las Vegas"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "warming_up",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.252948+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "ADAPTER_WARMING_UP",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 14.13,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.252948+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 24.48,
+          "temp_uncertainty_90pct": [
+            21.93,
+            27.03
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.252948+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.68,
+            26.58
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.252948+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.56,
+            26.26
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.252948+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            19.17,
+            27.37
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.252948+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            14.84,
+            24.44
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "WESTERN_DISTURBANCE_ACTIVE"
+        ],
+        "vorticity_advection_vector": [
+          0.015,
+          -0.005
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.252948+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Cairo",
+    "lat": 30.0444,
+    "lon": 31.2357,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 30.0444,
+        "longitude": 31.2357,
+        "station_name": "Cairo"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "specialized",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.267220+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "LOCAL_RESIDUAL_ADAPTER",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 12.27,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.267220+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 25.04,
+          "temp_uncertainty_90pct": [
+            23.39,
+            26.69
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.267220+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            21.63,
+            25.63
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.267220+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            20.67,
+            25.15
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.267220+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            20.42,
+            26.12
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.267220+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            15.36,
+            23.92
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "WESTERN_DISTURBANCE_ACTIVE"
+        ],
+        "vorticity_advection_vector": [
+          0.015,
+          -0.005
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.267220+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Tbilisi",
+    "lat": 41.7151,
+    "lon": 44.8271,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 41.7151,
+        "longitude": 44.8271,
+        "station_name": "Tbilisi"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "warming_up",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.279563+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "ADAPTER_WARMING_UP",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 12.65,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.279563+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 24.48,
+          "temp_uncertainty_90pct": [
+            21.93,
+            27.03
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.279563+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.68,
+            26.58
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.279563+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.56,
+            26.26
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.279563+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            19.17,
+            27.37
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.279563+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            14.84,
+            24.44
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "WESTERN_DISTURBANCE_ACTIVE"
+        ],
+        "vorticity_advection_vector": [
+          0.015,
+          -0.005
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.279563+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Beijing",
+    "lat": 39.9042,
+    "lon": 116.4074,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "station_name": "Beijing"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "warming_up",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.292278+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "ADAPTER_WARMING_UP",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 11.61,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.292278+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 24.48,
+          "temp_uncertainty_90pct": [
+            21.93,
+            27.03
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.292278+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.68,
+            26.58
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.292278+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.56,
+            26.26
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.292278+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            19.17,
+            27.37
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.292278+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            14.84,
+            24.44
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "WESTERN_DISTURBANCE_ACTIVE"
+        ],
+        "vorticity_advection_vector": [
+          0.015,
+          -0.005
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.292278+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Dhaka",
+    "lat": 23.8103,
+    "lon": 90.4125,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 23.8103,
+        "longitude": 90.4125,
+        "station_name": "Dhaka"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "warming_up",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.303956+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "ADAPTER_WARMING_UP",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 11.04,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.303956+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 24.48,
+          "temp_uncertainty_90pct": [
+            21.93,
+            27.03
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.303956+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.68,
+            26.58
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.303956+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.56,
+            26.26
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.303956+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            19.17,
+            27.37
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.303956+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            14.84,
+            24.44
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "POST_MONSOON_SYNOPTIC_RIDGE"
+        ],
+        "vorticity_advection_vector": [
+          0.002,
+          0.001
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.303956+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Tokyo",
+    "lat": 35.6895,
+    "lon": 139.6917,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": 35.6895,
+        "longitude": 139.6917,
+        "station_name": "Tokyo"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "specialized",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.315053+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "LOCAL_RESIDUAL_ADAPTER",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 9.64,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.315053+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 25.53,
+          "temp_uncertainty_90pct": [
+            22.97,
+            28.09
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.315053+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.52,
+            26.74
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.315053+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.43,
+            26.39
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.315053+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            18.86,
+            27.68
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.315053+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            13.01,
+            26.27
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "WESTERN_DISTURBANCE_ACTIVE"
+        ],
+        "vorticity_advection_vector": [
+          0.015,
+          -0.005
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.315053+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "Sydney",
+    "lat": -33.8688,
+    "lon": 151.2093,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": -33.8688,
+        "longitude": 151.2093,
+        "station_name": "Sydney"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "specialized",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.324753+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "LOCAL_RESIDUAL_ADAPTER",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 9.58,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.324753+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 23.96,
+          "temp_uncertainty_90pct": [
+            22.31,
+            25.61
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.324753+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            21.63,
+            25.63
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.324753+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            20.67,
+            25.15
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.324753+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            20.42,
+            26.12
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.324753+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            15.36,
+            23.92
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "POST_MONSOON_SYNOPTIC_RIDGE"
+        ],
+        "vorticity_advection_vector": [
+          0.002,
+          0.001
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.324753+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  },
+  {
+    "city": "S\u00e3o Paulo",
+    "lat": -23.5505,
+    "lon": -46.6333,
+    "result": {
+      "status": "SUCCESS",
+      "target_location": {
+        "latitude": -23.5505,
+        "longitude": -46.6333,
+        "station_name": "S\u00e3o Paulo"
+      },
+      "metadata": {
+        "model_version": "2.0.0-headless",
+        "profile": "server",
+        "degraded_mode": false,
+        "adapter_status": "warming_up",
+        "conformal_coverage_guarantee": "90% (Split Conformal)",
+        "persistence_blend_weight": 0.075,
+        "t0_timestamp_utc": "2026-11-14 05:11:58.334397+00:00",
+        "t0_timestamp_ist": "2026-11-14 10:41:58 IST",
+        "t0_assimilation_sources": [
+          "IMD_OPERATIONAL_AWS",
+          "INSTANT_ZERO_SHOT_CLIMATE_NORMALIZED",
+          "NASA_GPM_IMERG_ASSIMILATED",
+          "NASA_SMAP_HYDRO_INDEX"
+        ],
+        "active_engines": [
+          "ADAPTER_WARMING_UP",
+          "MODEL_ALPHA_GBDT",
+          "HYBRID_PHYSICS_STUDENT",
+          "SUBSEASONAL_CLIMATE_HEAD"
+        ],
+        "inference_latency_ms": 11.17,
+        "spending_incurred": "\u20b90.00"
+      },
+      "horizons": {
+        "+24h": {
+          "lead_time_hours": 24,
+          "horizon_label": "+24h",
+          "valid_time_utc": "2026-11-15T05:11:58.334397+00:00",
+          "valid_time_ist": "2026-11-15 10:41 IST",
+          "temperature_c": 24.48,
+          "temp_uncertainty_90pct": [
+            21.93,
+            27.03
+          ],
+          "msl_pressure_hpa": 1013.2,
+          "wind_speed_ms": 2.2,
+          "relative_humidity_pct": 63.2,
+          "precipitation_expected_mm": 3.38,
+          "rain_probability": 0.407,
+          "rain_hurdle_classification": "LIGHT_RAIN",
+          "dominant_engine": "MODEL_ALPHA_GBDT"
+        },
+        "+48h": {
+          "lead_time_hours": 48,
+          "horizon_label": "+48h",
+          "valid_time_utc": "2026-11-16T05:11:58.334397+00:00",
+          "valid_time_ist": "2026-11-16 10:41 IST",
+          "temperature_c": 23.63,
+          "temp_uncertainty_90pct": [
+            20.68,
+            26.58
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 66.2,
+          "precipitation_expected_mm": 1.18,
+          "rain_probability": 0.18,
+          "rain_hurdle_classification": "ISOLATED_DRIZZLE",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+72h": {
+          "lead_time_hours": 72,
+          "horizon_label": "+72h",
+          "valid_time_utc": "2026-11-17T05:11:58.334397+00:00",
+          "valid_time_ist": "2026-11-17 10:41 IST",
+          "temperature_c": 22.91,
+          "temp_uncertainty_90pct": [
+            19.56,
+            26.26
+          ],
+          "msl_pressure_hpa": 1037.8,
+          "wind_speed_ms": 0.5,
+          "relative_humidity_pct": 72.5,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.08,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "HYBRID_PHYSICS_STUDENT"
+        },
+        "+7d": {
+          "lead_time_hours": 168,
+          "horizon_label": "+7d",
+          "valid_time_utc": "2026-11-21T05:11:58.334397+00:00",
+          "valid_time_ist": "2026-11-21 10:41 IST",
+          "temperature_c": 23.27,
+          "temp_uncertainty_90pct": [
+            19.17,
+            27.37
+          ],
+          "msl_pressure_hpa": 1014.2,
+          "wind_speed_ms": 2.0,
+          "relative_humidity_pct": 60.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.1,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        },
+        "+30d": {
+          "lead_time_hours": 720,
+          "horizon_label": "+30d",
+          "valid_time_utc": "2026-12-14T05:11:58.334397+00:00",
+          "valid_time_ist": "2026-12-14 10:41 IST",
+          "temperature_c": 19.64,
+          "temp_uncertainty_90pct": [
+            14.84,
+            24.44
+          ],
+          "msl_pressure_hpa": 1016.5,
+          "wind_speed_ms": 1.8,
+          "relative_humidity_pct": 62.0,
+          "precipitation_expected_mm": 0.0,
+          "rain_probability": 0.05,
+          "rain_hurdle_classification": "NO_RAIN",
+          "dominant_engine": "SUBSEASONAL_CLIMATE_HEAD"
+        }
+      },
+      "synoptic_context": {
+        "active_drivers": [
+          "POST_MONSOON_SYNOPTIC_RIDGE"
+        ],
+        "vorticity_advection_vector": [
+          0.002,
+          0.001
+        ],
+        "geostrophic_adjustment_status": "GEOSTROPHICALLY_BALANCED",
+        "meridional_thermal_gradient_c_per_deg": -0.045
+      },
+      "alerts": [
+        {
+          "category": "GLOBAL_HYDROLOGY",
+          "level": "GREEN",
+          "title": "NORMAL RUNOFF: Low Hydrological Risk Index 2.1/100",
+          "description": "Precipitation and soil moisture within nominal drainage carrying capacities.",
+          "gauge_level_m": null,
+          "danger_mark_m": 0.0,
+          "runoff_risk_index": 2.1,
+          "issued_at_utc": "2026-11-14 05:11:58.334397+00:00",
+          "issued_at_ist": "2026-11-14 10:41:58 IST"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "_cached_at": 1794632820.7030342,
+  "_cached_iso": "2026-11-14T05:07:00.703038+00:00",
+  "payload": {
+    "source": "NASA_GPM_IMERG_ASSIMILATED_FALLBACK",
+    "auth_status": "REQUIRES_EARTHDATA_TOKEN",
+    "bounding_box": [
+      28.0,
+      30.5,
+      76.5,
+      78.5
+    ],
+    "mean_precip_rate_mm_hr": 0.0,
+    "max_precip_rate_mm_hr": 0.0,
+    "timestamp_utc": "2026-11-14T05:07:00.702231+00:00",
+    "note": "Using open assimilated satellite estimates until user configures NASA Earthdata Token."
+  }
+}

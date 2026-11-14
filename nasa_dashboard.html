@@ -1307,8 +1307,183 @@ function renderTrend(){
       pointHoverBackgroundColor:p.color, pointHoverBorderColor:"#ffffff", pointHoverBorderWidth:2.4,
       pointStyle:"circle"};
   });
+  // Reset labels to historical years only (strip forecast horizon slots)
+  trendChart.data.labels = [...YEARS];
   trendChart.data.datasets = ds;
   trendChart.update();
+}
+
+/* =====================================================================
+   11B · MODEL-GO FORECAST OVERLAY
+   Injects dotted forecast series into the trend and profile charts.
+   forecast = result.model_go from /analyze-graph
+   ===================================================================== */
+
+// Forecast horizon colours — contrasting against the warm palette
+const FORECAST_COLORS = {
+  "+24h":  "#a78bfa",   // violet
+  "+48h":  "#34d399",   // emerald
+  "+72h":  "#f472b6",   // pink
+  "+7d":   "#fbbf24",   // amber
+  "+30d":  "#60a5fa",   // sky-blue
+};
+
+function applyModelGoForecast(forecast) {
+  if (!forecast || !forecast.available || !forecast.horizons) {
+    // Clear any stale forecast datasets
+    trendChart.data.datasets = trendChart.data.datasets.filter(d => !d._modelgo);
+    trendChart.update();
+    return;
+  }
+
+  const horizons = forecast.horizons;
+
+  // ── Trend chart: show forecast temperatures as single data-points appended after 2025 ──
+  // Build a fake label axis extension: YEARS + forecast horizon labels
+  const baseLabels = [...YEARS];
+  const forecastLabels = Object.keys(horizons).filter(k => horizons[k]);
+  const extendedLabels = [...baseLabels, ...forecastLabels];
+  trendChart.data.labels = extendedLabels;
+
+  // Strip old forecast datasets
+  const historicalDS = trendChart.data.datasets.filter(d => !d._modelgo);
+
+  // Pad historical datasets with null for each forecast horizon slot
+  historicalDS.forEach(ds => {
+    while (ds.data.length < extendedLabels.length) ds.data.push(null);
+  });
+
+  // For each trend key, add a forecast dataset if temperature data exists
+  const forecastDS = [];
+  [...state.trend].forEach(key => {
+    if (key !== "T2M_MAX" && key !== "T2M_MIN" && key !== "TSOIL1") return; // temp-family only
+    Object.entries(horizons).forEach(([label, h], idx) => {
+      const color = FORECAST_COLORS[label] || "#e879f9";
+      const dataArr = new Array(baseLabels.length).fill(null);
+      // Find the slot index for this horizon
+      const slotIdx = extendedLabels.indexOf(label);
+      if (slotIdx === -1) return;
+      const pointData = new Array(extendedLabels.length).fill(null);
+      pointData[slotIdx] = h.temperature_c;
+      forecastDS.push({
+        _modelgo: true,
+        label: `Forecast ${label} · Temp`,
+        data: pointData,
+        borderColor: color,
+        backgroundColor: "transparent",
+        borderDash: [6, 4],
+        borderWidth: 2,
+        tension: 0,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointStyle: "triangle",
+        pointBackgroundColor: color,
+        pointBorderColor: "#fff",
+        pointBorderWidth: 1.5,
+        fill: false,
+      });
+    });
+  });
+
+  // If T2M_MAX is not in trend, add a generic temperature forecast overlay
+  if (forecastDS.length === 0) {
+    Object.entries(horizons).forEach(([label, h]) => {
+      const color = FORECAST_COLORS[label] || "#e879f9";
+      const pointData = new Array(extendedLabels.length).fill(null);
+      const slotIdx = extendedLabels.indexOf(label);
+      if (slotIdx === -1) return;
+      pointData[slotIdx] = h.temperature_c;
+      forecastDS.push({
+        _modelgo: true,
+        label: `Forecast ${label} · Temp °C`,
+        data: pointData,
+        borderColor: color,
+        backgroundColor: "transparent",
+        borderDash: [6, 4],
+        borderWidth: 2,
+        tension: 0,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointStyle: "triangle",
+        pointBackgroundColor: color,
+        pointBorderColor: "#fff",
+        pointBorderWidth: 1.5,
+        fill: false,
+      });
+    });
+  }
+
+  trendChart.data.datasets = [...historicalDS, ...forecastDS];
+  trendChart.update();
+
+  // ── Profile chart: append a forecast dotted line for max temp across horizons ──
+  // The profile chart x-axis is months; we can't map forecast hours to months directly.
+  // Instead we append a horizontal reference line showing the +24h forecast temperature.
+  const h24 = horizons["+24h"];
+  if (h24) {
+    const fcProfile = profileChart.data.datasets.filter(d => !d._modelgo);
+    // Remove old model_go datasets
+    profileChart.data.datasets = fcProfile;
+
+    // Add a dotted line at the +24h forecast temperature level
+    const monthCount = profileChart.data.labels.length;
+    profileChart.data.datasets.push({
+      _modelgo: true,
+      label: `Model-Go +24h Forecast: ${h24.temperature_c} °C`,
+      data: new Array(monthCount).fill(h24.temperature_c),
+      borderColor: FORECAST_COLORS["+24h"],
+      backgroundColor: "transparent",
+      borderDash: [8, 4],
+      borderWidth: 2,
+      tension: 0,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      fill: false,
+    });
+
+    // +48h
+    const h48 = horizons["+48h"];
+    if (h48) {
+      profileChart.data.datasets.push({
+        _modelgo: true,
+        label: `Model-Go +48h Forecast: ${h48.temperature_c} °C`,
+        data: new Array(monthCount).fill(h48.temperature_c),
+        borderColor: FORECAST_COLORS["+48h"],
+        backgroundColor: "transparent",
+        borderDash: [4, 6],
+        borderWidth: 1.6,
+        tension: 0,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        fill: false,
+      });
+    }
+
+    profileChart.update();
+  }
+
+  // ── Precip bar chart: add a +24h expected precipitation reference overlay ──
+  if (h24 && h24.precipitation_mm !== undefined) {
+    const existingBar = barChart.data.datasets.filter(d => !d._modelgo);
+    barChart.data.datasets = existingBar;
+    const monthCount = barChart.data.labels.length;
+    barChart.data.datasets.push({
+      _modelgo: true,
+      type: "line",
+      label: `Model-Go +24h Precip: ${h24.precipitation_mm} mm`,
+      data: new Array(monthCount).fill(h24.precipitation_mm),
+      borderColor: FORECAST_COLORS["+24h"],
+      backgroundColor: "transparent",
+      borderDash: [6, 4],
+      borderWidth: 2,
+      tension: 0,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      fill: false,
+      _modelgo: true,
+    });
+    barChart.update();
+  }
 }
 
 
@@ -1495,6 +1670,11 @@ async function generateDashboardInsights(scope = "all"){
     if(!response.ok) throw new Error(result.detail || `HTTP ${response.status}`);
     if(String(result.city || "")!==String(city) ||
        String(result.selected_year || "ALL")!==String(year)) return;
+
+    // ── Apply model_go forecast overlays (dotted lines) ──────────────────
+    if (result.model_go) {
+      try { applyModelGoForecast(result.model_go); } catch(e) { console.warn("model_go overlay error:", e); }
+    }
 
     const perChart=result.chart_insights || {};
 

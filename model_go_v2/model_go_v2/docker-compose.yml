@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  model_go_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: model_go_api
+    ports:
+      - "8080:8080"
+    environment:
+      - MODEL_GO_PROFILE=server
+      - NASA_EARTHDATA_TOKEN=${NASA_EARTHDATA_TOKEN:-}
+      - IMD_API_KEY=${IMD_API_KEY:-}
+      - MODEL_GO_WEBHOOKS=${MODEL_GO_WEBHOOKS:-}
+      - REDIS_URL=redis://feature_store_cache:6379/0
+    restart: unless-stopped
+    depends_on:
+      - feature_store_cache
+
+  feature_store_cache:
+    image: redis:7-alpine
+    container_name: model_go_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  model_go_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: model_go_sync_worker
+    environment:
+      - MODEL_GO_PROFILE=server
+      - REDIS_URL=redis://feature_store_cache:6379/0
+      - NASA_EARTHDATA_TOKEN=${NASA_EARTHDATA_TOKEN:-}
+      - IMD_API_KEY=${IMD_API_KEY:-}
+    entrypoint: ["python", "-c", "import asyncio; from model_go.ingestion.background_worker import IngestionBackgroundWorker; w = IngestionBackgroundWorker(); asyncio.run(w.run_sync_daemon())"]
+    restart: unless-stopped
+    depends_on:
+      - feature_store_cache
+
+volumes:
+  redis_data:

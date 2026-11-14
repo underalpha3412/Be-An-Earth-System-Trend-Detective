@@ -1,0 +1,70 @@
+{
+  "delhi_trainval_rows": 3989,
+  "delhi_test_rows": 1095,
+  "delhi_train_date_min": "2012-01-30",
+  "delhi_trainval_date_max": "2022-12-31",
+  "delhi_test_date_min": "2023-01-01",
+  "delhi_test_date_max": "2025-12-30",
+  "tuning_summary": [
+    {
+      "Model": "XGB",
+      "Target": "T2M_1D",
+      "Val_Metric": "RMSE=1.1075",
+      "N_Trees": 562
+    },
+    {
+      "Model": "XGB",
+      "Target": "RH2M_1D",
+      "Val_Metric": "RMSE=5.6135",
+      "N_Trees": 567
+    },
+    {
+      "Model": "XGB",
+      "Target": "PRECIP_1D_HURDLE",
+      "Val_Metric": "PR-AUC=0.7262, CSI=0.5265 (tau=0.20)",
+      "N_Trees": "clf=333, reg=50"
+    },
+    {
+      "Model": "XGB",
+      "Target": "T2M_7D",
+      "Val_Metric": "RMSE=2.0618",
+      "N_Trees": 151
+    },
+    {
+      "Model": "XGB",
+      "Target": "T2M_30D_MEAN",
+      "Val_Metric": "RMSE=1.4148",
+      "N_Trees": 187
+    },
+    {
+      "Model": "LGB",
+      "Target": "T2M_1D",
+      "Val_Metric": "RMSE=1.0967",
+      "N_Trees": 717
+    },
+    {
+      "Model": "LGB",
+      "Target": "RH2M_1D",
+      "Val_Metric": "RMSE=5.5981",
+      "N_Trees": 470
+    },
+    {
+      "Model": "LGB",
+      "Target": "PRECIP_1D_HURDLE",
+      "Val_Metric": "PR-AUC=0.7376, CSI=0.5372 (tau=0.35)",
+      "N_Trees": "clf=164, reg=76"
+    },
+    {
+      "Model": "LGB",
+      "Target": "T2M_7D",
+      "Val_Metric": "RMSE=2.0790",
+      "N_Trees": 115
+    },
+    {
+      "Model": "LGB",
+      "Target": "T2M_30D_MEAN",
+      "Val_Metric": "RMSE=1.4097",
+      "N_Trees": 206
+    }
+  ]
+}
