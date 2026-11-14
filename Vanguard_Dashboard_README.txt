@@ -206,3 +206,30 @@ A later improvement would be to create a small desktop launcher or package the d
 - Never paste your API key into `nasa_dashboard.html`.
 - Do not share screenshots that expose your API key.
 - Keep the API key only in the backend environment file.
+
+## Starting the Model, Backend, and Frontend
+
+1. **Model**: The project ships with the pretrained `model_go_v2` directory (≈16 GB). No separate installation is required – the backend loads the model files automatically when it starts.
+
+2. **Backend**:
+   ```bash
+   # Activate the Python virtual environment if not already active
+   source .venv/bin/activate   # on Windows use `.venv\Scripts\activate`
+   # Start the FastAPI server
+   uvicorn ai_backend:app --reload
+   ```
+   The server will listen on `http://127.0.0.1:8000`. Verify it is running by opening `http://127.0.0.1:8000/docs` in a browser.
+
+3. **Frontend (Dashboard)**:
+   - Open a **second** terminal (keep the backend terminal running).
+   - If you have the VS Code **Live Server** extension, right‑click `nasa_dashboard.html` and select **Open with Live Server**.
+   - Otherwise, serve the HTML with any local static server (e.g., `python -m http.server 5500`).
+   - The dashboard will contact the backend at `http://127.0.0.1:8000/analyze-graph`. Ensure the port matches the backend URL.
+
+**Typical workflow**:
+1. Activate the virtual environment.
+2. Start the backend (`uvicorn …`).
+3. Launch the dashboard via Live Server.
+4. Interact with the UI; the backend will process graph data using the bundled model.
+
+Remember to stop the backend with `Ctrl + C` when you are done.
