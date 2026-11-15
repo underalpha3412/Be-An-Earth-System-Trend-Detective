@@ -4,6 +4,9 @@ import os
 import sys
 import ssl
 import traceback
+import time
+import http.client
+import socket
 import urllib.error
 import urllib.request
 from typing import Any
@@ -199,31 +202,52 @@ def call_nemotron(prompt: str) -> str:
         method="POST",
     )
 
-    try:
-        with urllib.request.urlopen(
-            req,
-            timeout=120,
-            context=SSL_CONTEXT,
-        ) as response:
-            result = json.loads(response.read().decode("utf-8"))
+    # NVIDIA NIM can occasionally close a connection before the complete
+    # response body arrives. Retry only transient transport failures; do not
+    # retry authentication, quota, or other explicit HTTP errors.
+    last_transport_error = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(
+                req,
+                timeout=180,
+                context=SSL_CONTEXT,
+            ) as response:
+                body = response.read()
+            result = json.loads(body.decode("utf-8"))
+            last_transport_error = None
+            break
+        except (http.client.IncompleteRead, http.client.RemoteDisconnected,
+                ConnectionResetError, TimeoutError, socket.timeout,
+                urllib.error.URLError) as error:
+            last_transport_error = error
+            print(
+                f"NVIDIA NIM transient transport failure "
+                f"(attempt {attempt + 1}/3): {type(error).__name__}: {error}"
+            )
+            if attempt < 2:
+                time.sleep(2 * (attempt + 1))
+        except urllib.error.HTTPError as error:
+            details = error.read().decode("utf-8", errors="replace")
+            print(f"NVIDIA NIM HTTP error {error.code}: {details}")
+            raise HTTPException(
+                status_code=error.code if error.code in (400, 401, 403, 404, 429) else 502,
+                detail=f"NVIDIA Nemotron API error ({error.code}): {details}",
+            )
 
-    except urllib.error.HTTPError as error:
-        details = error.read().decode("utf-8", errors="replace")
-        print(f"NVIDIA NIM HTTP error {error.code}: {details}")
-        raise HTTPException(
-            status_code=error.code if error.code in (400, 401, 403, 404, 429) else 502,
-            detail=f"NVIDIA Nemotron API error ({error.code}): {details}",
-        )
-
-    except urllib.error.URLError as error:
-        print(f"NVIDIA NIM connection error: {error}")
+    if last_transport_error is not None:
         raise HTTPException(
             status_code=502,
             detail=(
-                "Could not establish a verified HTTPS connection to NVIDIA NIM. "
-                f"Check your network, certificates, or proxy settings. Details: {error.reason}"
+                "NVIDIA Nemotron connection ended before a complete response "
+                "was received after 3 attempts. This is usually a temporary "
+                "network or NVIDIA service interruption. Check your connection "
+                f"and retry. Last error: {type(last_transport_error).__name__}: "
+                f"{last_transport_error}"
             ),
         )
+
+    # The response has now been read completely and parsed as JSON.
 
     choices = result.get("choices") or []
     if not choices:
