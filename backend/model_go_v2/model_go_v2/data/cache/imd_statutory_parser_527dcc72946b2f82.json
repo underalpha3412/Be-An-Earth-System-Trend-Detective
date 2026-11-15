@@ -1,0 +1,16 @@
+{
+  "_cached_at": 1794725935.9670448,
+  "_cached_iso": "2026-11-15T06:58:55.967046+00:00",
+  "payload": {
+    "warnings": [
+      {
+        "category": "IMD_STATUTORY",
+        "level": "GREEN",
+        "title": "IMD Operational Public Advisory: Clear Sky / Shallow Fog",
+        "description": "Mainly clear sky. Shallow to moderate fog during early morning hours. No severe weather alert for Delhi NCT.",
+        "valid_until_utc": "2026-11-15T06:58:55.966635+00:00",
+        "issuing_authority": "India Meteorological Department, Lodhi Road, New Delhi"
+      }
+    ]
+  }
+}
