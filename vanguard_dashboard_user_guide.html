@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Vanguard Dashboard installation and user guide">
+<title>Vanguard Dashboard | Installation & User Guide</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--accent-soft:#eff6ff;--green:#15803d;--green-soft:#f0fdf4;--code:#111827}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(125deg,#101d3b,#1d4ed8);color:white;padding:54px 22px 48px}
+.hero{max-width:1080px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.75rem;font-weight:700;color:#bfdbfe}.hero h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.12;margin:12px 0}.hero p{max-width:720px;color:#dbeafe;margin:0;font-size:1.08rem}
+.wrap{max-width:1080px;margin:28px auto;padding:0 20px 60px;display:grid;grid-template-columns:245px minmax(0,1fr);gap:26px}
+nav{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+nav strong{display:block;margin:0 0 10px}nav a{display:block;text-decoration:none;color:var(--muted);padding:6px 8px;border-radius:7px;font-size:.91rem}nav a:hover{background:var(--accent-soft);color:var(--accent)}
+main{min-width:0}.intro,.section{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:26px;margin-bottom:18px;box-shadow:0 3px 12px #0f172a08}
+h2{font-size:1.45rem;margin:0 0 14px;line-height:1.3}h3{font-size:1.05rem;margin:20px 0 8px}p{margin:8px 0 14px}.muted{color:var(--muted)}a{color:var(--accent)}.software{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.tile{border:1px solid var(--line);border-radius:12px;padding:16px}.tile h3{margin:0 0 5px}.tile p{font-size:.92rem;color:var(--muted);min-height:72px}.download{display:inline-block;background:var(--accent-soft);color:#1d4ed8;padding:7px 10px;border-radius:8px;text-decoration:none;font-weight:650;font-size:.9rem}
+.note{padding:13px 15px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:7px;margin:15px 0}.success{border-left-color:var(--green);background:var(--green-soft)}
+pre{background:var(--code);color:#e5e7eb;padding:16px;border-radius:10px;overflow:auto;font: .9rem/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;margin:10px 0 16px;position:relative}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.inline{background:#f1f5f9;padding:2px 5px;border-radius:5px}
+.copy{float:right;border:1px solid #64748b;background:#263449;color:white;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.75rem}
+ol,ul{padding-left:22px}li{margin:5px 0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}th{background:#f8fafc;font-size:.9rem}
+.steps{display:grid;gap:12px}.step{border:1px solid var(--line);border-radius:11px;padding:15px}.step b{display:block;margin-bottom:4px}.pill{display:inline-block;background:var(--green-soft);color:var(--green);font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:20px}
+footer{text-align:center;color:var(--muted);font-size:.9rem;padding:25px}
+@media(max-width:800px){.wrap{grid-template-columns:1fr}nav{position:static}.software{grid-template-columns:1fr}.tile p{min-height:0}}
+@media print{body{background:white}.wrap{display:block;margin:0;max-width:none}nav,.copy{display:none}header{padding:25px;background:#1d4ed8!important;print-color-adjust:exact}.section,.intro{box-shadow:none;break-inside:avoid}a{color:#111;text-decoration:underline}}
+</style>
+</head>
+<body>
+<header>
+ <div class="hero">
+  <div class="eyebrow">Vanguard · Project documentation</div>
+  <h1>Dashboard Installation &amp; User Guide</h1>
+  <p>Run the environmental trend dashboard directly from its GitHub repository on your Windows computer. Follow this guide to install the required tools, start the application, and explore its data.</p>
+ </div>
+</header>
+<div class="wrap">
+<nav aria-label="Table of contents">
+ <strong>On this page</strong>
+ <a href="#requirements">1. Requirements</a>
+ <a href="#download">2. Download the project</a>
+ <a href="#backend">3. Start the backend</a>
+ <a href="#frontend">4. Start the frontend</a>
+ <a href="#navigate">5. Navigate the dashboard</a>
+ <a href="#example">6. Example investigation</a>
+ <a href="#troubleshoot">7. Troubleshooting</a>
+ <a href="#shutdown">8. Shut down</a>
+ <a href="#quick">9. Quick reference</a>
+</nav>
+<main>
+<section class="intro">
+ <h2>Before you begin</h2>
+ <p>The dashboard uses a React/Vite frontend and a Python backend. Python runs the backend services and data-processing components. Node.js and npm install and run the frontend. Git downloads the source code from GitHub.</p>
+ <div class="note"><b>Important:</b> These instructions assume Windows and the common project layout containing <code class="inline">backend</code> and <code class="inline">frontend</code> folders. If the repository README or package scripts specify different commands, follow the repository's instructions.</div>
+</section>
+
+<section class="section" id="requirements">
+ <h2>1. Install the required software</h2>
+ <div class="software">
+  <div class="tile"><h3>Python 3.11+</h3><p>Required to run the FastAPI backend and its data-processing components.</p><a class="download" href="https://www.python.org/downloads/" target="_blank" rel="noopener">Download Python ↗</a></div>
+  <div class="tile"><h3>Node.js (LTS)</h3><p>Required to install and run the React frontend. npm is included with Node.js.</p><a class="download" href="https://nodejs.org/en/download" target="_blank" rel="noopener">Download Node.js ↗</a></div>
+  <div class="tile"><h3>Git</h3><p>Recommended for cloning the project repository directly from GitHub.</p><a class="download" href="https://git-scm.com/downloads" target="_blank" rel="noopener">Download Git ↗</a></div>
+ </div>
+ <div class="note"><b>Windows tip:</b> During Python installation, select <b>Add Python to PATH</b>. After installing the software, close and reopen Command Prompt or PowerShell.</div>
+</section>
+
+<section class="section" id="download">
+ <h2>2. Download the dashboard repository</h2>
+ <ol>
+  <li>Open the <a href="https://github.com/underalpha3412/Be-An-Earth-System-Trend-Detective" target="_blank" rel="noopener">Be-An-Earth-System-Trend-Detective GitHub repository</a>.</li>
+  <li>Open Command Prompt or PowerShell.</li>
+  <li>Run the following command to download the project:</li>
+ </ol>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/underalpha3412/Be-An-Earth-System-Trend-Detective.git</code></pre>
+ <p>Enter the downloaded project directory:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>cd Be-An-Earth-System-Trend-Detective</code></pre>
+ <p>The project source code is now available on your computer.</p>
+</section>
+
+<section class="section" id="backend">
+ <h2>3. Start the backend</h2>
+ <p>The backend handles data processing, API requests, calculations, and communication with the frontend.</p>
+ <p>Open a terminal in the project directory and enter the backend folder:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>cd backend</code></pre>
+ <p>Create a Python virtual environment:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>python -m venv venv</code></pre>
+ <p>Activate it on Windows:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>venv\Scripts\activate</code></pre>
+ <p>Install the required Python packages:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>pip install -r requirements.txt</code></pre>
+ <p>Start the FastAPI server:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>uvicorn main:app --reload --port 8000</code></pre>
+ <div class="note success"><span class="pill">Backend running</span><br>Backend address: <a href="http://127.0.0.1:8000" target="_blank">http://127.0.0.1:8000</a><br>Interactive API documentation: <a href="http://127.0.0.1:8000/docs" target="_blank">http://127.0.0.1:8000/docs</a></div>
+ <p class="muted"><b>Note:</b> The command assumes the backend entry point is <code class="inline">main.py</code> and that it exposes an application named <code class="inline">app</code>. If the repository uses another entry point, use the command specified in its backend README.</p>
+</section>
+
+<section class="section" id="frontend">
+ <h2>4. Start the frontend</h2>
+ <p>Keep the backend terminal open and running. Open a <b>second terminal</b> in the main project directory.</p>
+ <p>Enter the frontend folder:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>cd frontend</code></pre>
+ <p>Install frontend dependencies:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>npm install</code></pre>
+ <p>Start the React development server:</p>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>npm run dev</code></pre>
+ <div class="note success"><span class="pill">Frontend ready</span><br>Vite usually displays a local address such as <a href="http://localhost:5173" target="_blank">http://localhost:5173</a>. Open the exact URL printed in your terminal in Chrome, Edge, or another modern browser.</div>
+ <p class="muted">If the repository uses a different frontend folder or npm scripts, check its <code class="inline">package.json</code> and README for the correct commands.</p>
+</section>
+
+<section class="section" id="navigate">
+ <h2>5. How to navigate and use the dashboard</h2>
+ <div class="steps">
+  <div class="step"><b>Step 1: Select a location</b>Choose the city or geographical region you want to investigate using the dashboard's location selector.</div>
+  <div class="step"><b>Step 2: Set the time period</b>Select the historical period you want to study. For example, choose 2015 to 2025 to examine changes over that period.</div>
+  <div class="step"><b>Step 3: Choose a visualization</b>Select an available chart type, such as a line chart, to see how the selected environmental measurements change over time.</div>
+  <div class="step"><b>Step 4: Examine the results</b>Study the plotted data, look for increasing or decreasing patterns, and compare changes across locations and time periods.</div>
+  <div class="step"><b>Step 5: Explore AI-powered insights</b>Where the AI analysis feature is available, use it to ask questions about the selected data and understand the observed environmental patterns.</div>
+ </div>
+</section>
+
+<section class="section" id="example">
+ <h2>6. Example investigation</h2>
+ <p>Try this configuration as a first experiment:</p>
+ <div class="table-wrap"><table><thead><tr><th>Setting</th><th>Selection</th></tr></thead><tbody><tr><td>Time period</td><td>2015 to 2025</td></tr><tr><td>Location</td><td>Moscow</td></tr><tr><td>Chart type</td><td>Line chart</td></tr></tbody></table></div>
+ <p>After applying the selections:</p>
+ <ol>
+  <li>Observe the changes in the plotted measurements.</li>
+  <li>Look for long-term increases or decreases.</li>
+  <li>Identify unusual fluctuations.</li>
+  <li>Compare the results with another city.</li>
+  <li>Use the available AI analysis feature to explore possible explanations.</li>
+ </ol>
+ <div class="note">A visible trend does not automatically prove its cause. Interpret the results alongside the underlying data and scientific context.</div>
+</section>
+
+<section class="section" id="troubleshoot">
+ <h2>7. Common issues and solutions</h2>
+ <div class="table-wrap"><table><thead><tr><th>Problem</th><th>What to do</th></tr></thead><tbody>
+ <tr><td><code>python is not recognized</code></td><td>Reinstall Python with “Add Python to PATH” enabled, then reopen the terminal.</td></tr>
+ <tr><td><code>npm is not recognized</code></td><td>Install Node.js LTS and restart the terminal.</td></tr>
+ <tr><td><code>ModuleNotFoundError</code></td><td>Activate the virtual environment and install <code>requirements.txt</code> again.</td></tr>
+ <tr><td><code>npm install</code> fails</td><td>Check your internet connection and Node.js installation.</td></tr>
+ <tr><td>Frontend cannot connect to backend</td><td>Ensure the backend is running and the frontend API configuration points to the correct backend URL.</td></tr>
+ <tr><td>Port already in use</td><td>Stop the other process using that port or configure another available port.</td></tr>
+ </tbody></table></div>
+</section>
+
+<section class="section" id="shutdown">
+ <h2>8. How to shut down the dashboard</h2>
+ <ol>
+  <li>Return to the backend terminal and press <code class="inline">Ctrl + C</code>.</li>
+  <li>Return to the frontend terminal and press <code class="inline">Ctrl + C</code>.</li>
+  <li>Close the browser tab.</li>
+ </ol>
+ <p>The next time you use the dashboard, start the backend and frontend again. You do not need to reinstall dependencies every time.</p>
+</section>
+
+<section class="section" id="quick">
+ <h2>9. Quick reference</h2>
+ <h3>Backend terminal</h3>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>cd backend
+venv\Scripts\activate
+uvicorn main:app --reload --port 8000</code></pre>
+ <h3>Frontend terminal</h3>
+ <pre><button class="copy" onclick="copyCode(this)">Copy</button><code>cd frontend
+npm run dev</code></pre>
+ <h3>Open in browser</h3>
+ <p><a href="http://localhost:5173" target="_blank">http://localhost:5173</a> (use the exact URL shown by Vite if it differs).</p>
+ <div class="note"><b>Final note:</b> The first setup requires installing the Python and Node.js dependencies. Once installed, you can run the dashboard locally whenever you need it. An internet connection may also be required for external data services and AI-powered features.</div>
+</section>
+<footer>Vanguard Dashboard · Installation &amp; User Guide</footer>
+</main>
+</div>
+<script>
+function copyCode(button){
+ const code=button.parentElement.querySelector('code').innerText;
+ if(navigator.clipboard && window.isSecureContext){
+  navigator.clipboard.writeText(code).then(()=>{button.textContent='Copied';setTimeout(()=>button.textContent='Copy',1400);});
+ }else{
+  const area=document.createElement('textarea');area.value=code;document.body.appendChild(area);area.select();
+  try{document.execCommand('copy');button.textContent='Copied';}catch(e){button.textContent='Select & copy';}
+  area.remove();setTimeout(()=>button.textContent='Copy',1400);
+ }
+}
+</script>
+</body>
+</html>
