@@ -1,6 +1,6 @@
 {
-  "_cached_at": 1794723741.756481,
-  "_cached_iso": "2026-11-15T06:22:21.756482+00:00",
+  "_cached_at": 1794759302.0384388,
+  "_cached_iso": "2026-11-15T16:15:02.038442+00:00",
   "payload": {
     "source": "ANTECEDENT_API_ESTIMATE",
     "auth_status": "REQUIRES_EARTHDATA_TOKEN",
@@ -8,6 +8,6 @@
     "surface_soil_moisture_m3_m3": 0.22,
     "saturation_fraction": 0.48,
     "runoff_coefficient": 0.35,
-    "timestamp_utc": "2026-11-15T06:22:21.756063+00:00"
+    "timestamp_utc": "2026-11-15T16:15:02.037922+00:00"
   }
 }
